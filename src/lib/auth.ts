@@ -16,30 +16,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // AUTO-SEED: Se o banco estiver vazio, cria os usuários padrão
-        const userCount = await prisma.user.count();
-        if (userCount === 0) {
-          const hashedPassword = await bcrypt.hash("reitor123", 10);
-          const studentPassword = await bcrypt.hash("aluno123", 10);
-          
-          await prisma.user.createMany({
-            data: [
-              {
-                name: "Reitor Pablu",
-                email: "reitor@biomedica.edu.br",
-                password: hashedPassword,
-                role: "ADMIN"
-              },
-              {
-                name: "Aluno João",
-                email: "aluno@biomedica.edu.br",
-                password: studentPassword,
-                role: "STUDENT"
-              }
-            ]
-          });
-        }
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
