@@ -27,7 +27,7 @@ export function Dashboard() {
   const [showBib, setShowBib] = useState(false);
   const [showAlerts, setShowAlerts] = useState(false);
   const [showAppendix, setShowAppendix] = useState(false);
-  const { toggle, isCompleted, getBlockProgress, totalCompleted, loaded, notebookUrls, saveNotebookUrl } = useProgress();
+  const { toggle, isCompleted, getBlockProgress, totalCompleted, loaded, notebookUrls, saveNotebookUrl, accesses } = useProgress();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -53,10 +53,11 @@ export function Dashboard() {
   }, [totalCompleted, totalTopics]);
 
   const handleSelectPart = useCallback((id: number) => {
+    if (!accesses.includes(id)) return; // Prevent selection if locked
     setActivePart(id);
     setMobileMenuOpen(false);
     router.replace(`?part=${id}`, { scroll: false });
-  }, [router]);
+  }, [router, accesses]);
 
   if (!loaded) {
     return (
@@ -81,6 +82,7 @@ export function Dashboard() {
           collapsed={sidebarCollapsed}
           onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
           getBlockProgress={getBlockProgress}
+          accesses={accesses}
         />
       </div>
 
@@ -103,6 +105,7 @@ export function Dashboard() {
                 collapsed={false}
                 onToggle={() => setMobileMenuOpen(false)}
                 getBlockProgress={getBlockProgress}
+                accesses={accesses}
               />
             </div>
           </>
@@ -158,7 +161,23 @@ export function Dashboard() {
           </div>
 
           <AnimatePresence mode="wait">
-            {currentPart && (
+            {currentPart && !accesses.includes(currentPart.id) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-8 p-12 text-center bg-card border border-border rounded-2xl flex flex-col items-center justify-center gap-4"
+              >
+                <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center">
+                  <AlertTriangle className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <h2 className="text-xl font-bold">Módulo Bloqueado</h2>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  Você ainda não possui acesso a este semestre. Fale com a administração para solicitar a liberação do conteúdo.
+                </p>
+              </motion.div>
+            )}
+
+            {currentPart && accesses.includes(currentPart.id) && (
               <motion.div
                 key={currentPart.id}
                 initial={{ opacity: 0, y: 20 }}

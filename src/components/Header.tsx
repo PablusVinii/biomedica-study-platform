@@ -1,6 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import { Sun, Moon, Menu, BookOpen, AlertTriangle } from "lucide-react";
+import { Sun, Moon, Menu, BookOpen, AlertTriangle, LogOut, ShieldAlert, User } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useState } from "react";
+import { ProfileModal } from "./ProfileModal";
 
 interface HeaderProps {
   theme: "dark" | "light";
@@ -13,6 +17,9 @@ interface HeaderProps {
 }
 
 export function Header({ theme, toggleTheme, toggleSidebar, totalTopics, completedTopics, onShowAlerts, onShowBibliography }: HeaderProps) {
+  const { data: session } = useSession();
+  const [showProfile, setShowProfile] = useState(false);
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
   const overallProgress = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
 
   return (
@@ -59,6 +66,31 @@ export function Header({ theme, toggleTheme, toggleSidebar, totalTopics, complet
           >
             <AlertTriangle className="w-4 h-4" />
           </button>
+
+          <div className="w-px h-4 bg-border mx-1" />
+
+          {isAdmin && (
+            <Link href="/admin" className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-primary" title="Painel do Reitor">
+              <ShieldAlert className="w-4 h-4" />
+            </Link>
+          )}
+
+          <button
+            onClick={() => setShowProfile(true)}
+            className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-primary"
+            title="Meu Perfil"
+          >
+            <User className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={() => signOut()}
+            className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-destructive"
+            title="Sair"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
@@ -68,6 +100,8 @@ export function Header({ theme, toggleTheme, toggleSidebar, totalTopics, complet
           </button>
         </div>
       </div>
+      
+      <ProfileModal open={showProfile} onClose={() => setShowProfile(false)} />
     </header>
   );
 }

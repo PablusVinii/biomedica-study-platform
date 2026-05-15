@@ -1,56 +1,53 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
-
-const STORAGE_KEY = "biomedica-progress";
-const STORAGE_KEY_URLS = "biomedica-notebook-urls";
+import { useState, useCallback, useEffect } from "react";
+import { toggleTopicProgress, saveTopicNotebookUrl, getUserData } from "@/app/actions";
 
 export function useProgress() {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [notebookUrls, setNotebookUrls] = useState<Record<string, string>>({});
+  const [accesses, setAccesses] = useState<number[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const storedProgress = localStorage.getItem(STORAGE_KEY);
-      if (storedProgress) {
-        setCompleted(new Set(JSON.parse(storedProgress)));
+    getUserData().then((data) => {
+      if (data) {
+        setCompleted(new Set(data.progresses.map((p) => p.topicId)));
+        const urls: Record<string, string> = {};
+        data.notes.forEach((n) => {
+          if (n.notebookUrl) urls[n.topicId] = n.notebookUrl;
+        });
+        setNotebookUrls(urls);
+        setAccesses(data.accesses || []);
       }
-      const storedUrls = localStorage.getItem(STORAGE_KEY_URLS);
-      if (storedUrls) {
-        setNotebookUrls(JSON.parse(storedUrls));
-      }
-    } catch { /* ignore */ }
-    setLoaded(true);
+      setLoaded(true);
+    });
   }, []);
 
-  useEffect(() => {
-    if (loaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]));
-    }
-  }, [completed, loaded]);
-
-  useEffect(() => {
-    if (loaded) {
-      localStorage.setItem(STORAGE_KEY_URLS, JSON.stringify(notebookUrls));
-    }
-  }, [notebookUrls, loaded]);
-
   const toggle = useCallback((topicId: string) => {
-    setCompleted(prev => {
+    setCompleted((prev) => {
       const next = new Set(prev);
-      if (next.has(topicId)) next.delete(topicId);
-      else next.add(topicId);
+      const isCurrentlyCompleted = next.has(topicId);
+      const isNowCompleted = !isCurrentlyCompleted;
+      
+      if (isCurrentlyCompleted) {
+        next.delete(topicId);
+      } else {
+        next.add(topicId);
+      }
+      
+      toggleTopicProgress(topicId, isNowCompleted).catch(console.error);
       return next;
     });
   }, []);
 
   const isCompleted = useCallback((topicId: string) => completed.has(topicId), [completed]);
 
-  const saveNotebookUrl = useCallback((id: string, url: string) => {
-    setNotebookUrls(prev => ({
-      ...prev,
-      [id]: url.trim()
-    }));
+  const saveNotebookUrl = useCallback((topicId: string, url: string) => {
+    setNotebookUrls((prev) => {
+      const next = { ...prev, [topicId]: url.trim() };
+      saveTopicNotebookUrl(topicId, url.trim()).catch(console.error);
+      return next;
+    });
   }, []);
 
   const getBlockProgress = useCallback((topicIds: string[]) => {
@@ -70,6 +67,7 @@ export function useProgress() {
     totalCompleted,
     loaded,
     notebookUrls,
-    saveNotebookUrl
+    saveNotebookUrl,
+    accesses
   };
 }
