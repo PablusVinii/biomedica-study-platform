@@ -1,15 +1,4 @@
-import { curriculumData } from "./curriculum-data-1";
-import { curriculumData2 } from "./curriculum-data-2";
-import { curriculumData3 } from "./curriculum-data-3";
-import { curriculumData4 } from "./curriculum-data-4";
 import { Part } from "./types";
-
-export const allCurriculumData: Part[] = [
-  ...curriculumData,
-  ...curriculumData2,
-  ...curriculumData3,
-  ...curriculumData4,
-];
 
 export const formationGapAlerts = [
   {

@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AdminPanel } from "@/components/AdminPanel";
-import { allCurriculumData } from "@/lib/data";
+
 
 const prisma = new PrismaClient();
 

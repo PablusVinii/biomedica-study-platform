@@ -12,7 +12,7 @@ import { GapAlerts } from "./GapAlerts";
 import { useEffect } from "react";
 import { useProgress } from "@/hooks/useProgress";
 import { useTheme } from "@/hooks/useTheme";
-import { allCurriculumData, formationGapAlerts } from "@/lib/data";
+import { formationGapAlerts } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { BookCopy, AlertTriangle } from "lucide-react";
 
@@ -291,7 +291,7 @@ export function Dashboard() {
       </motion.main>
 
       {/* Modals */}
-      <BibliographyModal open={showBib} onClose={() => setShowBib(false)} parts={allCurriculumData} />
+      <BibliographyModal open={showBib} onClose={() => setShowBib(false)} parts={parts} />
       <AlertsModal open={showAlerts} onClose={() => setShowAlerts(false)} alerts={formationGapAlerts} />
       <AppendixModal open={showAppendix} onClose={() => setShowAppendix(false)} />
     </div>

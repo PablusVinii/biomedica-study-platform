@@ -48,7 +48,7 @@ export function BibliographyModal({ open, onClose, parts }: BibliographyModalPro
                         Bloco {block.id}. {block.title}
                       </p>
                       <ul className="space-y-0.5 pl-4">
-                        {block.bibliography.map((bib, i) => (
+                        {(typeof block.bibliography === 'string' ? JSON.parse(block.bibliography) : (block.bibliography || [])).map((bib: string, i: number) => (
                           <li key={i} className="text-xs text-muted-foreground list-disc">{bib}</li>
                         ))}
                       </ul>
