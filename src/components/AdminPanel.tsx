@@ -409,6 +409,8 @@ export function AdminPanel({
             </motion.div>
           </div>
         )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {/* Topic Editor Modal */}
         {editingTopic && (

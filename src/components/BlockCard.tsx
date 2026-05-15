@@ -139,6 +139,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                       <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{h}</span>
                     </div>
                   ))}
+                  </div>
                 </div>
               )}
 
