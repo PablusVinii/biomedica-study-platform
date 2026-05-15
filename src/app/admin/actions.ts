@@ -1,12 +1,10 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
 
 export async function toggleUserCourseAccess(userId: string, partId: number, currentStatus: boolean) {
   const session = await getServerSession(authOptions);
