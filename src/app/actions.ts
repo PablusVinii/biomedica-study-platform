@@ -1,11 +1,9 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
 
 export async function toggleTopicProgress(topicId: string, completed: boolean) {
   const session = await getServerSession(authOptions);
