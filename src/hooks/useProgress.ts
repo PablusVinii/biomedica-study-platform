@@ -7,12 +7,14 @@ export function useProgress() {
   const [notebookUrls, setNotebookUrls] = useState<Record<string, string>>({});
   const [blockNotes, setBlockNotes] = useState<Record<number, { title: string; content: string; tags: string[] }>>({});
   const [accesses, setAccesses] = useState<number[]>([]);
+  const [curriculum, setCurriculum] = useState<any[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     getUserData().then((data) => {
       if (data) {
         setCompleted(new Set(data.progresses.map((p) => p.topicId)));
+        
         const urls: Record<string, string> = {};
         data.notes.forEach((n) => {
           if (n.notebookUrl) urls[n.topicId] = n.notebookUrl;
@@ -29,6 +31,7 @@ export function useProgress() {
         });
         setBlockNotes(bNotes);
 
+        setCurriculum(data.curriculum || []);
         setAccesses(data.accesses || []);
       }
       setLoaded(true);
@@ -80,8 +83,6 @@ export function useProgress() {
     return Math.round((done / topicIds.length) * 100);
   }, [completed]);
 
-
-
   const totalCompleted = completed.size;
 
   return {
@@ -94,6 +95,7 @@ export function useProgress() {
     saveNotebookUrl,
     blockNotes,
     saveModuleNote,
-    accesses
+    accesses,
+    curriculum
   };
 }

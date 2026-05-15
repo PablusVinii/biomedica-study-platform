@@ -71,18 +71,34 @@ export async function getUserData() {
   
   let accessesIds: number[] = [];
   if ((session.user as any).role === "ADMIN") {
-     // Return 1..8 manually or just a large array
-     accessesIds = [1, 2, 3, 4, 5, 6, 7, 8];
+     const allParts = await prisma.coursePart.findMany({ select: { id: true } });
+     accessesIds = allParts.map(p => p.id);
   } else {
      const accesses = await prisma.courseAccess.findMany({ where: { userId } });
      accessesIds = accesses.map(a => a.partId);
   }
+
+  const curriculum = await prisma.coursePart.findMany({
+    where: { id: { in: accessesIds } },
+    orderBy: { order: "asc" },
+    include: {
+      blocks: {
+        orderBy: { order: "asc" },
+        include: {
+          topics: {
+            orderBy: { order: "asc" }
+          }
+        }
+      }
+    }
+  });
   
   return { 
     progresses, 
     notes, 
     blockNotes,
     accesses: accessesIds,
+    curriculum,
     user: session.user 
   };
 }

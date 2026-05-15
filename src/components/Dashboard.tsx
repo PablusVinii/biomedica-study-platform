@@ -37,8 +37,11 @@ export function Dashboard() {
     saveNotebookUrl, 
     blockNotes,
     saveModuleNote,
-    accesses 
+    accesses,
+    curriculum 
   } = useProgress();
+
+  const parts = curriculum;
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -47,13 +50,13 @@ export function Dashboard() {
   }, []);
 
   const currentPart = useMemo(
-    () => allCurriculumData.find(p => p.id === activePart),
-    [activePart]
+    () => parts.find(p => p.id === activePart),
+    [activePart, parts]
   );
 
   const totalTopics = useMemo(
-    () => allCurriculumData.reduce((acc, p) => acc + p.blocks.reduce((a, b) => a + b.topics.length, 0), 0),
-    []
+    () => parts.reduce((acc, p) => acc + p.blocks.reduce((a: any, b: any) => a + b.topics.length, 0), 0),
+    [parts]
   );
 
   // CR Estimado dinamicamente: 0 tópicos = 0.0, todos = 10.0
@@ -87,7 +90,7 @@ export function Dashboard() {
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
         <Sidebar
-          parts={allCurriculumData}
+          parts={parts}
           activePart={activePart}
           onSelectPart={handleSelectPart}
           collapsed={sidebarCollapsed}
@@ -110,7 +113,7 @@ export function Dashboard() {
             />
             <div className="fixed left-0 top-0 z-40 lg:hidden">
               <Sidebar
-                parts={allCurriculumData}
+                parts={parts}
                 activePart={activePart}
                 onSelectPart={handleSelectPart}
                 collapsed={false}

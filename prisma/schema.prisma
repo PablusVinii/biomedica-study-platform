@@ -23,52 +23,86 @@ model User {
   courseAccess  CourseAccess[]
 }
 
-model Progress {
+model CoursePart {
+  id          Int           @id @default(autoincrement())
+  title       String
+  icon        String        @default("Activity")
+  order       Int           @default(0)
+  blocks      CourseBlock[]
+  accesses    CourseAccess[]
+  createdAt   DateTime      @default(now())
+}
+
+model CourseBlock {
+  id          Int           @id @default(autoincrement())
+  title       String
+  content     String?
+  partId      Int
+  part        CoursePart    @relation(fields: [partId], references: [id])
+  topics      CourseTopic[]
+  highlights  String?       // JSON string array
+  bibliography String?      // JSON string array
+  order       Int           @default(0)
+  blockNotes  BlockNote[]
+}
+
+model CourseTopic {
+  id          String        @id @default(uuid())
+  title       String
+  content     String?
+  videoUrl    String?       // Link do YouTube
+  blockId     Int
+  block       CourseBlock   @relation(fields: [blockId], references: [id])
+  progresses  Progress[]
+  topicNotes  TopicNote[]
+  order       Int           @default(0)
+}
+
+model BlockNote {
   id        String   @id @default(uuid())
   userId    String
-  topicId   String
-  completed Boolean  @default(true)
-  createdAt DateTime @default(now())
+  blockId   Int
+  title     String?
+  content   String
+  tags      String?
+  user      User     @relation(fields: [userId], references: [id])
+  block     CourseBlock @relation(fields: [blockId], references: [id])
+  updatedAt DateTime @updatedAt
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, topicId])
+  @@unique([userId, blockId])
 }
 
 model TopicNote {
   id          String   @id @default(uuid())
   userId      String
   topicId     String
-  content     String?
   notebookUrl String?
+  user        User     @relation(fields: [userId], references: [id])
+  topic       CourseTopic @relation(fields: [topicId], references: [id])
   updatedAt   DateTime @updatedAt
-
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, topicId])
 }
 
-model BlockNote {
-  id          String   @id @default(uuid())
-  userId      String
-  blockId     Int
-  title       String?  // Tema
-  content     String?  // Assunto
-  tags        String?  // Tags (comma-separated)
-  updatedAt   DateTime @updatedAt
+model Progress {
+  id        String   @id @default(uuid())
+  userId    String
+  topicId   String
+  completed Boolean  @default(true)
+  user      User     @relation(fields: [userId], references: [id])
+  topic     CourseTopic @relation(fields: [topicId], references: [id])
+  createdAt DateTime @default(now())
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, blockId])
+  @@unique([userId, topicId])
 }
 
 model CourseAccess {
   id        String   @id @default(uuid())
   userId    String
   partId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  part      CoursePart @relation(fields: [partId], references: [id])
   createdAt DateTime @default(now())
-
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, partId])
 }

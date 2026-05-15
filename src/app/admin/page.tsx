@@ -31,7 +31,22 @@ export default async function AdminPage() {
     accesses: u.courseAccess.map(a => a.partId),
   }));
 
-  const parts = allCurriculumData.map(p => ({
+  // Fetch full curriculum from DB
+  const curriculum = await prisma.coursePart.findMany({
+    orderBy: { order: "asc" },
+    include: {
+      blocks: {
+        orderBy: { order: "asc" },
+        include: {
+          topics: {
+            orderBy: { order: "asc" }
+          }
+        }
+      }
+    }
+  });
+
+  const parts = curriculum.map(p => ({
     id: p.id,
     title: p.title
   }));
@@ -44,7 +59,7 @@ export default async function AdminPage() {
           <p className="text-muted-foreground">Gestão de Alunos e Liberação de Semestres</p>
         </div>
         
-        <AdminPanel initialUsers={usersData} parts={parts} />
+        <AdminPanel initialUsers={usersData} parts={parts} curriculum={curriculum} />
       </div>
     </div>
   );

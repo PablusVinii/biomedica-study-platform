@@ -57,6 +57,16 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
     setNoteDraft(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }));
   };
 
+  // Parsing JSON data from DB if needed
+  const highlights = typeof block.highlights === 'string' ? JSON.parse(block.highlights) : (block.highlights || []);
+  const bibliography = typeof block.bibliography === 'string' ? JSON.parse(block.bibliography) : (block.bibliography || []);
+
+  const getYouTubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
   return (
     <motion.div
       layout
@@ -116,19 +126,19 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
               )}
 
               {/* Highlights / Callouts */}
-              {block.highlights && block.highlights.length > 0 && (
+              {highlights && highlights.length > 0 && (
                 <div className="rounded-lg bg-warning/10 border border-warning/30 p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertTriangle className="w-4 h-4 text-warning" />
                     <span className="text-xs font-semibold text-warning">Ênfase Regulatória / Prática</span>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {block.highlights.map((h, i) => (
-                      <span key={i} className="inline-flex items-center px-2 py-0.5 rounded-md bg-warning/15 text-warning text-[11px] font-medium border border-warning/20">
-                        {h}
-                      </span>
-                    ))}
-                  </div>
+                  <div className="flex flex-wrap gap-2">
+                  {highlights.map((h: string, i: number) => (
+                    <div key={i} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{h}</span>
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -390,7 +400,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                       className="overflow-hidden"
                     >
                       <ul className="mt-2.5 space-y-2 pl-4 border-l-2 border-primary/30">
-                        {block.bibliography.map((bib, i) => (
+                        {bibliography.map((bib: string, i: number) => (
                           <li key={i} className="text-xs text-muted-foreground leading-relaxed font-sans">
                             {bib}
                           </li>
@@ -441,6 +451,17 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
+                {selectedTopic.videoUrl && (
+                  <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-black border border-border">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${getYouTubeId(selectedTopic.videoUrl)}`}
+                      title="Aula"
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                )}
                 {selectedTopic.content ? (
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown
