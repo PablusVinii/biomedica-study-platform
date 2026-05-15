@@ -39,6 +39,29 @@ export async function saveTopicNotebookUrl(topicId: string, url: string) {
   });
 }
 
+export async function saveBlockNote(blockId: number, data: { title: string; content: string; tags: string }) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) throw new Error("Não autenticado");
+
+  const userId = (session.user as any).id;
+
+  await prisma.blockNote.upsert({
+    where: { userId_blockId: { userId, blockId } },
+    update: { 
+      title: data.title,
+      content: data.content,
+      tags: data.tags
+    },
+    create: { 
+      userId, 
+      blockId, 
+      title: data.title,
+      content: data.content,
+      tags: data.tags
+    }
+  });
+}
+
 export async function getUserData() {
   const session = await getServerSession(authOptions);
   if (!session?.user) return null;
@@ -46,6 +69,7 @@ export async function getUserData() {
 
   const progresses = await prisma.progress.findMany({ where: { userId } });
   const notes = await prisma.topicNote.findMany({ where: { userId } });
+  const blockNotes = await prisma.blockNote.findMany({ where: { userId } });
   
   let accessesIds: number[] = [];
   if ((session.user as any).role === "ADMIN") {
@@ -59,6 +83,7 @@ export async function getUserData() {
   return { 
     progresses, 
     notes, 
+    blockNotes,
     accesses: accessesIds,
     user: session.user 
   };

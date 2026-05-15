@@ -1,10 +1,11 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
-import { toggleTopicProgress, saveTopicNotebookUrl, getUserData } from "@/app/actions";
+import { toggleTopicProgress, saveTopicNotebookUrl, getUserData, saveBlockNote } from "@/app/actions";
 
 export function useProgress() {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [notebookUrls, setNotebookUrls] = useState<Record<string, string>>({});
+  const [blockNotes, setBlockNotes] = useState<Record<number, { title: string; content: string; tags: string[] }>>({});
   const [accesses, setAccesses] = useState<number[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -17,6 +18,17 @@ export function useProgress() {
           if (n.notebookUrl) urls[n.topicId] = n.notebookUrl;
         });
         setNotebookUrls(urls);
+
+        const bNotes: Record<number, { title: string; content: string; tags: string[] }> = {};
+        data.blockNotes.forEach((bn: any) => {
+          bNotes[bn.blockId] = {
+            title: bn.title || "",
+            content: bn.content || "",
+            tags: bn.tags ? bn.tags.split(",") : []
+          };
+        });
+        setBlockNotes(bNotes);
+
         setAccesses(data.accesses || []);
       }
       setLoaded(true);
@@ -50,6 +62,18 @@ export function useProgress() {
     });
   }, []);
 
+  const saveModuleNote = useCallback((blockId: number, data: { title: string; content: string; tags: string[] }) => {
+    setBlockNotes((prev) => {
+      const next = { ...prev, [blockId]: data };
+      saveBlockNote(blockId, {
+        title: data.title,
+        content: data.content,
+        tags: data.tags.join(",")
+      }).catch(console.error);
+      return next;
+    });
+  }, []);
+
   const getBlockProgress = useCallback((topicIds: string[]) => {
     if (topicIds.length === 0) return 0;
     const done = topicIds.filter(id => completed.has(id)).length;
@@ -68,6 +92,8 @@ export function useProgress() {
     loaded,
     notebookUrls,
     saveNotebookUrl,
+    blockNotes,
+    saveModuleNote,
     accesses
   };
 }

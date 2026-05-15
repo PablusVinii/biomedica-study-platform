@@ -17,6 +17,7 @@ model User {
 
   progresses    Progress[]
   notes         TopicNote[]
+  blockNotes    BlockNote[]
   courseAccess  CourseAccess[]
 }
 
@@ -43,6 +44,20 @@ model TopicNote {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, topicId])
+}
+
+model BlockNote {
+  id          String   @id @default(uuid())
+  userId      String
+  blockId     Int
+  title       String?  // Tema
+  content     String?  // Assunto
+  tags        String?  // Tags (comma-separated)
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, blockId])
 }
 
 model CourseAccess {

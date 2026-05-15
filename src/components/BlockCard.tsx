@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, BookOpen, CheckCircle2, Circle, AlertTriangle, FileText, X, GraduationCap, Link2, Save, ExternalLink } from "lucide-react";
+import { ChevronDown, BookOpen, CheckCircle2, Circle, AlertTriangle, FileText, X, GraduationCap, Link2, Save, ExternalLink, StickyNote, Tag, Plus } from "lucide-react";
 import { Block, Topic } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
@@ -15,14 +15,23 @@ interface BlockCardProps {
   getBlockProgress: (ids: string[]) => number;
   notebookUrl?: string;
   onSaveNotebookUrl: (url: string) => void;
+  note?: { title: string; content: string; tags: string[] };
+  onSaveNote: (data: { title: string; content: string; tags: string[] }) => void;
 }
 
-export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, notebookUrl, onSaveNotebookUrl }: BlockCardProps) {
+export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, notebookUrl, onSaveNotebookUrl, note, onSaveNote }: BlockCardProps) {
   const [open, setOpen] = useState(false);
   const [showBib, setShowBib] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [showNotebookInput, setShowNotebookInput] = useState(false);
   const [urlDraft, setUrlDraft] = useState(notebookUrl || "");
+  const [showNoteEditor, setShowNoteEditor] = useState(false);
+  const [noteDraft, setNoteDraft] = useState({
+    title: note?.title || "",
+    content: note?.content || "",
+    tags: note?.tags || []
+  });
+  const [newTag, setNewTag] = useState("");
 
   const topicIds = block.topics.map(t => t.id);
   const progress = getBlockProgress(topicIds);
@@ -30,6 +39,22 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
   const handleSaveUrl = () => {
     onSaveNotebookUrl(urlDraft);
     setShowNotebookInput(false);
+  };
+
+  const handleSaveNote = () => {
+    onSaveNote(noteDraft);
+    setShowNoteEditor(false);
+  };
+
+  const addTag = () => {
+    if (newTag.trim() && !noteDraft.tags.includes(newTag.trim())) {
+      setNoteDraft(prev => ({ ...prev, tags: [...prev.tags, newTag.trim()] }));
+      setNewTag("");
+    }
+  };
+
+  const removeTag = (tag: string) => {
+    setNoteDraft(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }));
   };
 
   return (
@@ -209,8 +234,139 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                   )}
                 </AnimatePresence>
 
-                {notebookUrl && !showNotebookInput && (
-                  <p className="text-[10px] text-muted-foreground/60 truncate mt-1">{notebookUrl}</p>
+                  {notebookUrl && !showNotebookInput && (
+                    <p className="text-[10px] text-muted-foreground/60 truncate mt-1">{notebookUrl}</p>
+                  )}
+                </div>
+
+              {/* Module Notes Section */}
+              <div className="pt-2 border-t border-border/40">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <StickyNote className="w-3 h-3" />
+                    Minhas Anotações
+                  </span>
+                  <button
+                    onClick={() => {
+                      setNoteDraft({
+                        title: note?.title || "",
+                        content: note?.content || "",
+                        tags: note?.tags || []
+                      });
+                      setShowNoteEditor(!showNoteEditor);
+                    }}
+                    className="flex items-center gap-1 text-[11px] text-primary hover:text-primary/80 transition-colors font-medium"
+                  >
+                    {note?.content ? "Editar Notas" : "Escrever Notas"}
+                  </button>
+                </div>
+
+                <AnimatePresence>
+                  {showNoteEditor && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden space-y-3 mt-2 p-3 rounded-xl bg-muted/30 border border-border"
+                    >
+                      <div>
+                        <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5">
+                          Tema / Título
+                        </label>
+                        <input
+                          type="text"
+                          value={noteDraft.title}
+                          onChange={(e) => setNoteDraft(prev => ({ ...prev, title: e.target.value }))}
+                          placeholder="Ex: Conceitos Fundamentais de Fluidos"
+                          className="w-full text-xs px-3 py-2 rounded-lg bg-background border border-border focus:border-primary focus:outline-none transition-colors"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5">
+                          Assunto / Anotação
+                        </label>
+                        <textarea
+                          value={noteDraft.content}
+                          onChange={(e) => setNoteDraft(prev => ({ ...prev, content: e.target.value }))}
+                          placeholder="Escreva aqui o que você aprendeu..."
+                          rows={4}
+                          className="w-full text-xs px-3 py-2 rounded-lg bg-background border border-border focus:border-primary focus:outline-none transition-colors resize-none scrollbar-thin"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5">
+                          Tags
+                        </label>
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {noteDraft.tags.map(tag => (
+                            <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">
+                              {tag}
+                              <button onClick={() => removeTag(tag)} className="hover:text-destructive transition-colors">
+                                <X className="w-2.5 h-2.5" />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="relative flex-1">
+                            <Tag className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
+                            <input
+                              type="text"
+                              value={newTag}
+                              onChange={(e) => setNewTag(e.target.value)}
+                              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
+                              placeholder="Adicionar tag..."
+                              className="w-full text-xs pl-8 pr-3 py-2 rounded-lg bg-background border border-border focus:border-primary focus:outline-none transition-colors"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={addTag}
+                            className="p-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+                          >
+                            <Plus className="w-4 h-4 text-muted-foreground" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-2 pt-1">
+                        <button
+                          onClick={() => setShowNoteEditor(false)}
+                          className="px-3 py-1.5 rounded-lg text-[11px] font-bold text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handleSaveNote}
+                          className="flex items-center gap-1 px-4 py-1.5 rounded-lg bg-primary text-primary-foreground text-[11px] font-bold hover:opacity-90 transition-opacity shadow-sm"
+                        >
+                          <Save className="w-3 h-3" />
+                          Salvar Notas
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {note?.content && !showNoteEditor && (
+                  <div className="mt-2 p-3 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
+                    {note.title && <h4 className="text-xs font-bold text-foreground">{note.title}</h4>}
+                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                      {note.content}
+                    </p>
+                    {note.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {note.tags.map(tag => (
+                          <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium border border-border/50">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 

@@ -27,7 +27,18 @@ export function Dashboard() {
   const [showBib, setShowBib] = useState(false);
   const [showAlerts, setShowAlerts] = useState(false);
   const [showAppendix, setShowAppendix] = useState(false);
-  const { toggle, isCompleted, getBlockProgress, totalCompleted, loaded, notebookUrls, saveNotebookUrl, accesses } = useProgress();
+  const { 
+    toggle, 
+    isCompleted, 
+    getBlockProgress, 
+    totalCompleted, 
+    loaded, 
+    notebookUrls, 
+    saveNotebookUrl, 
+    blockNotes,
+    saveModuleNote,
+    accesses 
+  } = useProgress();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -238,6 +249,8 @@ export function Dashboard() {
                         getBlockProgress={getBlockProgress}
                         notebookUrl={notebookUrls[String(block.id)]}
                         onSaveNotebookUrl={(url) => saveNotebookUrl(String(block.id), url)}
+                        note={blockNotes[block.id]}
+                        onSaveNote={(data) => saveModuleNote(block.id, data)}
                       />
                     </motion.div>
                   ))}

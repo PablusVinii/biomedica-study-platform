@@ -3,7 +3,7 @@
     "00d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e": {
       "workers": {
         "app/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260cb7fb7b1cb1e5ceb71c09bf1395c2e7fd3cfb96c%22%2C%22exportedName%22%3A%22saveBlockNote%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -13,49 +13,10 @@
       "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
       "exportedName": "getUserData"
     },
-    "600878c8493c0a7ca388931589f130fac33e793dbd": {
-      "workers": {
-        "app/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/page": "action-browser"
-      },
-      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
-      "exportedName": "toggleTopicProgress"
-    },
-    "60f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e": {
-      "workers": {
-        "app/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/page": "action-browser"
-      },
-      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
-      "exportedName": "saveTopicNotebookUrl"
-    },
-    "70ab0afa2b621579481ecac7715d61a1751c280cfd": {
-      "workers": {
-        "app/admin/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cadmin%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2240404d7416285d5da73901ab82d66a4fafe0f1f818%22%2C%22exportedName%22%3A%22createUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cadmin%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2270ab0afa2b621579481ecac7715d61a1751c280cfd%22%2C%22exportedName%22%3A%22toggleUserCourseAccess%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cadmin%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/admin/page": "action-browser"
-      },
-      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\admin\\actions.ts",
-      "exportedName": "toggleUserCourseAccess"
-    },
     "40e671f1310180226d9f980310122be3a476588290": {
       "workers": {
         "app/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260cb7fb7b1cb1e5ceb71c09bf1395c2e7fd3cfb96c%22%2C%22exportedName%22%3A%22saveBlockNote%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -65,18 +26,44 @@
       "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
       "exportedName": "updateProfile"
     },
-    "40404d7416285d5da73901ab82d66a4fafe0f1f818": {
+    "600878c8493c0a7ca388931589f130fac33e793dbd": {
       "workers": {
-        "app/admin/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cadmin%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2240404d7416285d5da73901ab82d66a4fafe0f1f818%22%2C%22exportedName%22%3A%22createUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cadmin%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2270ab0afa2b621579481ecac7715d61a1751c280cfd%22%2C%22exportedName%22%3A%22toggleUserCourseAccess%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cadmin%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260cb7fb7b1cb1e5ceb71c09bf1395c2e7fd3cfb96c%22%2C%22exportedName%22%3A%22saveBlockNote%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
       "layer": {
-        "app/admin/page": "action-browser"
+        "app/page": "action-browser"
       },
-      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\admin\\actions.ts",
-      "exportedName": "createUser"
+      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
+      "exportedName": "toggleTopicProgress"
+    },
+    "60cb7fb7b1cb1e5ceb71c09bf1395c2e7fd3cfb96c": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260cb7fb7b1cb1e5ceb71c09bf1395c2e7fd3cfb96c%22%2C%22exportedName%22%3A%22saveBlockNote%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser"
+      },
+      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
+      "exportedName": "saveBlockNote"
+    },
+    "60f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2200d3206d0aaec7396c0a5ff0ab5979fb6f6d62b89e%22%2C%22exportedName%22%3A%22getUserData%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2240e671f1310180226d9f980310122be3a476588290%22%2C%22exportedName%22%3A%22updateProfile%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%22600878c8493c0a7ca388931589f130fac33e793dbd%22%2C%22exportedName%22%3A%22toggleTopicProgress%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260cb7fb7b1cb1e5ceb71c09bf1395c2e7fd3cfb96c%22%2C%22exportedName%22%3A%22saveBlockNote%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%2C%7B%22id%22%3A%2260f9c122d8e68d7c4d529ac9c4db8c0966cdaa137e%22%2C%22exportedName%22%3A%22saveTopicNotebookUrl%22%2C%22filename%22%3A%22..%2FC%3A%5C%5CUsers%5C%5Cpablu%5C%5C.gemini%5C%5Cantigravity%5C%5Cscratch%5C%5Cbiomedica-study-platform%5C%5Csrc%5C%5Capp%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser"
+      },
+      "filename": "../C:\\Users\\pablu\\.gemini\\antigravity\\scratch\\biomedica-study-platform\\src\\app\\actions.ts",
+      "exportedName": "saveTopicNotebookUrl"
     }
   },
   "edge": {},
