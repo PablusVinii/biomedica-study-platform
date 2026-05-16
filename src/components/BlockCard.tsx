@@ -459,7 +459,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                       if (!videoId) return null;
                       return (
                         <div key={index} className="space-y-2">
-                          {selectedTopic.videoUrl.split(";").filter((u: string) => u.trim()).length > 1 && (
+                          {((selectedTopic as any).videoUrl || "").split(";").filter((u: string) => u.trim()).length > 1 && (
                             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1">
                               Vídeo {index + 1}
                             </span>
