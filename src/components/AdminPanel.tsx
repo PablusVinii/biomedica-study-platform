@@ -25,7 +25,12 @@ export function AdminPanel({
   parts: { id: number, title: string }[],
   curriculum: any[]
 }) {
-  const [activeTab, setActiveTab] = useState<"users" | "content">("users");
+  const [activeTab, setActiveTab] = useState<"users" | "content">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("adminActiveTab") as any) || "users";
+    }
+    return "users";
+  });
   const [users, setUsers] = useState<AdminUser[]>(initialUsers);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -81,17 +86,42 @@ export function AdminPanel({
     }
   };
 
-  const [expandedParts, setExpandedParts] = useState<number[]>([]);
-  const [expandedBlocks, setExpandedBlocks] = useState<number[]>([]);
+  const [expandedParts, setExpandedParts] = useState<number[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("adminExpandedParts");
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+  const [expandedBlocks, setExpandedBlocks] = useState<number[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("adminExpandedBlocks");
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
   const [editingTopic, setEditingTopic] = useState<any>(null);
   const [editingBlock, setEditingBlock] = useState<any>(null);
 
   const togglePart = (id: number) => {
-    setExpandedParts(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    setExpandedParts(prev => {
+      const next = prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id];
+      localStorage.setItem("adminExpandedParts", JSON.stringify(next));
+      return next;
+    });
   };
 
   const toggleBlock = (id: number) => {
-    setExpandedBlocks(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    setExpandedBlocks(prev => {
+      const next = prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id];
+      localStorage.setItem("adminExpandedBlocks", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleTabChange = (tab: "users" | "content") => {
+    setActiveTab(tab);
+    localStorage.setItem("adminActiveTab", tab);
   };
 
   return (
@@ -99,20 +129,20 @@ export function AdminPanel({
       {/* Tab Navigation */}
       <div className="flex p-1 bg-muted rounded-xl w-fit">
         <button
-          onClick={() => setActiveTab("users")}
+          onClick={() => handleTabChange("users")}
           className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all",
-            activeTab === "users" ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
+            "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all",
+            activeTab === "users" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
           )}
         >
           <User className="w-4 h-4" />
           Gestão de Alunos
         </button>
         <button
-          onClick={() => setActiveTab("content")}
+          onClick={() => handleTabChange("content")}
           className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all",
-            activeTab === "content" ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
+            "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all",
+            activeTab === "content" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
           )}
         >
           <BookOpen className="w-4 h-4" />
