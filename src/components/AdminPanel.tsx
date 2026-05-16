@@ -268,20 +268,29 @@ export function AdminPanel({
                                         )}
                                       </div>
                                       <button
-                                        onClick={() => setEditingTopic(topic)}
+                                        onClick={() => setEditingTopic({ 
+                                          ...topic, 
+                                          videoUrls: (topic.videoUrl || "").split(";").filter((u: string) => u.trim()) 
+                                        })}
                                         className="p-1.5 opacity-0 group-hover:opacity-100 hover:bg-primary/20 rounded transition-all"
                                       >
                                         <Edit2 className="w-3.5 h-3.5 text-primary" />
                                       </button>
                                     </div>
                                   ))}
-                                  <button 
-                                    onClick={() => setEditingTopic({ blockId: block.id, title: "", videoUrl: "", content: "", isNew: true })}
-                                    className="w-full mt-2 p-2 border border-dashed border-border rounded-md text-[10px] font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-1"
-                                  >
-                                    <Plus className="w-3 h-3" />
-                                    Adicionar Aula / Tema
-                                  </button>
+                                    <button 
+                                      onClick={() => setEditingTopic({ 
+                                        blockId: block.id, 
+                                        title: "", 
+                                        videoUrls: [""], 
+                                        content: "", 
+                                        isNew: true 
+                                      })}
+                                      className="w-full mt-2 p-2 border border-dashed border-border rounded-md text-[10px] font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-1"
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                      Adicionar Aula / Tema
+                                    </button>
                                 </div>
                               </motion.div>
                             )}
@@ -478,36 +487,24 @@ export function AdminPanel({
                     Vídeos da Aula (YouTube URLs)
                   </label>
                   <div className="space-y-3">
-                    {(editingTopic.videoUrl || "").split(";").filter((url: string) => url.trim()).length === 0 && (
-                      <div className="relative">
-                        <PlayCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <input
-                          type="text"
-                          value=""
-                          onChange={(e) => setEditingTopic({ ...editingTopic, videoUrl: e.target.value })}
-                          placeholder="https://youtube.com/watch?v=..."
-                          className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all text-sm outline-none"
-                        />
-                      </div>
-                    )}
-                    {(editingTopic.videoUrl || "").split(";").filter((url: string) => url.trim()).map((url: string, index: number) => (
+                    {(editingTopic.videoUrls || [""]).map((url: string, index: number) => (
                       <div key={index} className="relative group">
                         <PlayCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <input
                           type="text"
                           value={url}
                           onChange={(e) => {
-                            const urls = (editingTopic.videoUrl || "").split(";");
-                            urls[index] = e.target.value;
-                            setEditingTopic({ ...editingTopic, videoUrl: urls.join(";") });
+                            const newUrls = [...(editingTopic.videoUrls || [""])];
+                            newUrls[index] = e.target.value;
+                            setEditingTopic({ ...editingTopic, videoUrls: newUrls });
                           }}
+                          placeholder="https://youtube.com/watch?v=..."
                           className="w-full pl-11 pr-10 py-2.5 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all text-sm outline-none"
                         />
                         <button
                           onClick={() => {
-                            const urls = (editingTopic.videoUrl || "").split(";");
-                            urls.splice(index, 1);
-                            setEditingTopic({ ...editingTopic, videoUrl: urls.join(";") });
+                            const newUrls = (editingTopic.videoUrls || [""]).filter((_: any, i: number) => i !== index);
+                            setEditingTopic({ ...editingTopic, videoUrls: newUrls.length > 0 ? newUrls : [""] });
                           }}
                           className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-destructive/20 rounded-md transition-all"
                         >
@@ -516,7 +513,10 @@ export function AdminPanel({
                       </div>
                     ))}
                     <button
-                      onClick={() => setEditingTopic({ ...editingTopic, videoUrl: (editingTopic.videoUrl || "") + (editingTopic.videoUrl?.endsWith(";") || !editingTopic.videoUrl ? "" : ";") + " " })}
+                      onClick={() => setEditingTopic({ 
+                        ...editingTopic, 
+                        videoUrls: [...(editingTopic.videoUrls || [""]), ""] 
+                      })}
                       className="w-full py-2 border border-dashed border-border rounded-xl text-[10px] font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-1"
                     >
                       <Plus className="w-3 h-3" />
@@ -553,16 +553,21 @@ export function AdminPanel({
                   onClick={async () => {
                     setCreateLoading(true);
                     try {
+                      const finalVideoUrl = (editingTopic.videoUrls || [])
+                        .map((u: string) => u.trim())
+                        .filter((u: string) => u.length > 0)
+                        .join(";");
+
                       if (editingTopic.isNew) {
                         await createCourseTopic(editingTopic.blockId, {
                           title: editingTopic.title,
-                          videoUrl: editingTopic.videoUrl,
+                          videoUrl: finalVideoUrl,
                           content: editingTopic.content
                         });
                       } else {
                         await updateCourseTopic(editingTopic.id, {
                           title: editingTopic.title,
-                          videoUrl: editingTopic.videoUrl,
+                          videoUrl: finalVideoUrl,
                           content: editingTopic.content
                         });
                       }
