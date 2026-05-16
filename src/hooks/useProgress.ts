@@ -32,7 +32,7 @@ export function useProgress() {
         });
         setBlockNotes(bNotes);
 
-        setCurriculum(data.curriculum || []);
+        setCurriculum((data.curriculum as unknown as Part[]) || []);
         setAccesses(data.accesses || []);
       }
       setLoaded(true);
