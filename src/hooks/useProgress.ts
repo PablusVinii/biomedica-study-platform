@@ -1,13 +1,14 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { toggleTopicProgress, saveTopicNotebookUrl, getUserData, saveBlockNote } from "@/app/actions";
+import { Part } from "@/lib/types";
 
 export function useProgress() {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [notebookUrls, setNotebookUrls] = useState<Record<string, string>>({});
   const [blockNotes, setBlockNotes] = useState<Record<number, { title: string; content: string; tags: string[] }>>({});
   const [accesses, setAccesses] = useState<number[]>([]);
-  const [curriculum, setCurriculum] = useState<any[]>([]);
+  const [curriculum, setCurriculum] = useState<Part[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {

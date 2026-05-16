@@ -55,7 +55,7 @@ export function Dashboard() {
   );
 
   const totalTopics = useMemo(
-    () => parts.reduce((acc, p) => acc + p.blocks.reduce((a: any, b: any) => a + b.topics.length, 0), 0),
+    () => parts.reduce((acc, p) => acc + p.blocks.reduce((a, b) => a + b.topics.length, 0), 0),
     [parts]
   );
 

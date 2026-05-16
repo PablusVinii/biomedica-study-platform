@@ -67,7 +67,7 @@ export function Sidebar({ parts, activePart, onSelectPart, collapsed, onToggle, 
       <nav className="flex-1 overflow-y-auto py-2 scrollbar-thin">
         {(() => {
           const grouped = parts.reduce((acc, part) => {
-            const courseTitle = (part as any).course?.title || "Engenharia Biomédica";
+            const courseTitle = part.course?.title || "Engenharia Biomédica";
             if (!acc[courseTitle]) acc[courseTitle] = [];
             acc[courseTitle].push(part);
             return acc;

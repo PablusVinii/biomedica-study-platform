@@ -19,5 +19,11 @@ export interface Part {
   id: number;
   title: string;
   icon: string;
+  courseId?: number;
+  course?: {
+    id: number;
+    title: string;
+    description: string | null;
+  };
   blocks: Block[];
 }

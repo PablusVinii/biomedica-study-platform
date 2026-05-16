@@ -8,7 +8,7 @@ async function main() {
     // Delete in order to avoid FK issues
     await prisma.$executeRawUnsafe('TRUNCATE TABLE "CourseAccess", "Progress", "BlockNote", "TopicNote" CASCADE;');
     console.log("Cleanup finished!");
-  } catch (e) {
+  } catch (e: any) {
     console.log("Cleanup failed (maybe tables don't exist yet):", e.message);
   }
 }
