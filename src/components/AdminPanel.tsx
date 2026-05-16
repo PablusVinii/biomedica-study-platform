@@ -233,7 +233,18 @@ export function AdminPanel({
                             className="w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors"
                           >
                             <span className="text-sm font-bold text-foreground">{block.title}</span>
-                            {expandedBlocks.includes(block.id) ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                            <div className="flex items-center gap-2 pr-2">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingBlock(block);
+                                }}
+                                className="p-1.5 hover:bg-primary/20 rounded-lg transition-all"
+                              >
+                                <Edit2 className="w-3.5 h-3.5 text-primary" />
+                              </button>
+                              {expandedBlocks.includes(block.id) ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                            </div>
                           </button>
 
                           <AnimatePresence>
@@ -264,9 +275,12 @@ export function AdminPanel({
                                       </button>
                                     </div>
                                   ))}
-                                  <button className="w-full mt-2 p-2 border border-dashed border-border rounded-md text-[10px] font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-1">
+                                  <button 
+                                    onClick={() => setEditingTopic({ blockId: block.id, title: "", videoUrl: "", content: "", isNew: true })}
+                                    className="w-full mt-2 p-2 border border-dashed border-border rounded-md text-[10px] font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-1"
+                                  >
                                     <Plus className="w-3 h-3" />
-                                    Adicionar Tema
+                                    Adicionar Aula / Tema
                                   </button>
                                 </div>
                               </motion.div>
@@ -434,8 +448,8 @@ export function AdminPanel({
                     <Edit2 className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-foreground">Editar Tema</h2>
-                    <p className="text-xs text-muted-foreground">Ajuste o conteúdo e o link do vídeo</p>
+                    <h2 className="text-lg font-bold text-foreground">{editingTopic.isNew ? "Adicionar Aula" : "Editar Aula"}</h2>
+                    <p className="text-xs text-muted-foreground">{editingTopic.isNew ? "Crie um novo tópico de estudo" : "Ajuste o conteúdo e o link do vídeo"}</p>
                   </div>
                 </div>
                 <button
@@ -499,19 +513,27 @@ export function AdminPanel({
                 >
                   Cancelar
                 </button>
-                <button
+                  <button
                   onClick={async () => {
                     setCreateLoading(true);
                     try {
-                      await updateCourseTopic(editingTopic.id, {
-                        title: editingTopic.title,
-                        videoUrl: editingTopic.videoUrl,
-                        content: editingTopic.content
-                      });
+                      if (editingTopic.isNew) {
+                        await createCourseTopic(editingTopic.blockId, {
+                          title: editingTopic.title,
+                          videoUrl: editingTopic.videoUrl,
+                          content: editingTopic.content
+                        });
+                      } else {
+                        await updateCourseTopic(editingTopic.id, {
+                          title: editingTopic.title,
+                          videoUrl: editingTopic.videoUrl,
+                          content: editingTopic.content
+                        });
+                      }
                       setEditingTopic(null);
                       window.location.reload();
                     } catch (e) {
-                      alert("Erro ao salvar tema.");
+                      alert("Erro ao salvar aula.");
                     } finally {
                       setCreateLoading(false);
                     }
@@ -520,7 +542,103 @@ export function AdminPanel({
                   className="flex items-center gap-2 px-6 py-2.5 bg-accent text-accent-foreground font-bold rounded-xl hover:bg-accent/90 transition-all disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  {createLoading ? "Salvando..." : "Salvar Alterações"}
+                  {createLoading ? "Salvando..." : (editingTopic.isNew ? "Criar Aula" : "Salvar Alterações")}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      <AnimatePresence>
+        {/* Block Editor Modal */}
+        {editingBlock && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+              onClick={() => setEditingBlock(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 30 }}
+              className="relative w-full max-w-xl bg-card border border-border rounded-2xl shadow-2xl overflow-hidden"
+            >
+              <div className="p-6 border-b border-border flex items-center justify-between bg-muted/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <Edit2 className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-foreground">Editar Bloco / Tema</h2>
+                    <p className="text-xs text-muted-foreground">Ajuste o título principal do conjunto de aulas</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setEditingBlock(null)}
+                  className="p-2 rounded-lg hover:bg-muted transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                <div>
+                  <label className="block text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">
+                    Título do Bloco (Tema da Aula)
+                  </label>
+                  <input
+                    type="text"
+                    value={editingBlock.title}
+                    onChange={(e) => setEditingBlock({ ...editingBlock, title: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all text-sm outline-none"
+                    placeholder="Ex: Fundamentos de Engenharia de Software"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">
+                    Descrição Curta / Introdução
+                  </label>
+                  <textarea
+                    value={editingBlock.content || ""}
+                    onChange={(e) => setEditingBlock({ ...editingBlock, content: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-2.5 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all text-sm outline-none resize-none"
+                    placeholder="Uma breve introdução sobre o que será visto neste bloco..."
+                  />
+                </div>
+              </div>
+
+              <div className="p-4 border-t border-border bg-muted/30 flex justify-end gap-3">
+                <button
+                  onClick={() => setEditingBlock(null)}
+                  className="px-6 py-2.5 text-sm font-bold text-muted-foreground hover:text-foreground transition-all"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={async () => {
+                    setCreateLoading(true);
+                    try {
+                      await updateCourseBlock(editingBlock.id, {
+                        title: editingBlock.title,
+                        content: editingBlock.content
+                      });
+                      setEditingBlock(null);
+                      window.location.reload();
+                    } catch (e) {
+                      alert("Erro ao salvar bloco.");
+                    } finally {
+                      setCreateLoading(false);
+                    }
+                  }}
+                  disabled={createLoading}
+                  className="flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all disabled:opacity-50"
+                >
+                  <Save className="w-4 h-4" />
+                  {createLoading ? "Salvando..." : "Salvar Bloco"}
                 </button>
               </div>
             </motion.div>
