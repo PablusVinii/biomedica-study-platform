@@ -453,14 +453,29 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
 
               <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
                 {(selectedTopic as any).videoUrl && (
-                  <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-black border border-border">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${getYouTubeId((selectedTopic as any).videoUrl)}`}
-                      title="Aula"
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                  <div className="space-y-4">
+                    {(selectedTopic as any).videoUrl.split(";").filter((url: string) => url.trim()).map((url: string, index: number) => {
+                      const videoId = getYouTubeId(url.trim());
+                      if (!videoId) return null;
+                      return (
+                        <div key={index} className="space-y-2">
+                          {selectedTopic.videoUrl.split(";").filter((u: string) => u.trim()).length > 1 && (
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1">
+                              Vídeo {index + 1}
+                            </span>
+                          )}
+                          <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-black border border-border">
+                            <iframe
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              title={`Aula Parte ${index + 1}`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
                 {selectedTopic.content ? (
