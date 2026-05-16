@@ -584,7 +584,7 @@ export function AdminPanel({
             </motion.div>
           </div>
         )}
-      <AnimatePresence>
+
         {/* Block Editor Modal */}
         {editingBlock && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
