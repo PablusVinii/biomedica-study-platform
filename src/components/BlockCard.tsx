@@ -452,10 +452,10 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
-                {selectedTopic.videoUrl && (
+                {(selectedTopic as any).videoUrl && (
                   <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-black border border-border">
                     <iframe
-                      src={`https://www.youtube.com/embed/${getYouTubeId(selectedTopic.videoUrl)}`}
+                      src={`https://www.youtube.com/embed/${getYouTubeId((selectedTopic as any).videoUrl)}`}
                       title="Aula"
                       className="w-full h-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

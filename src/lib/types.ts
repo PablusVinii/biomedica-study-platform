@@ -3,6 +3,7 @@ export interface Topic {
   title: string;
   content?: string;
   notebookLmUrl?: string;
+  videoUrl?: string;
 }
 
 export interface Block {
