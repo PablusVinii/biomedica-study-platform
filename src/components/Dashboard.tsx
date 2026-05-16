@@ -130,7 +130,9 @@ export function Dashboard() {
             <p className="text-muted-foreground text-lg max-w-lg mx-auto">
               Selecione uma das formações acadêmicas abaixo para acessar o conteúdo e acompanhar seu progresso.
             </p>
-            {/* Debug info: {courses.length} cursos encontrados */}
+            <div className="text-xs text-primary font-mono mt-4">
+              Cursos detectados: {courses.length} | Partes: {curriculum.length} | Com Curso: {curriculum.filter(p => !!p.course).length}
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 w-full">
