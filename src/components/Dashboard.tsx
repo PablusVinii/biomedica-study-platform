@@ -130,9 +130,10 @@ export function Dashboard() {
             <p className="text-muted-foreground text-lg max-w-lg mx-auto">
               Selecione uma das formações acadêmicas abaixo para acessar o conteúdo e acompanhar seu progresso.
             </p>
+            {/* Debug info: {courses.length} cursos encontrados */}
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 w-full">
             {courses.map((course, idx) => {
               const courseParts = curriculum.filter(p => p.courseId === course.id);
               const allTopicIds = courseParts.flatMap(p => p.blocks.flatMap(b => b.topics.map(t => t.id)));
