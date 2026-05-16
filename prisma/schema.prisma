@@ -23,11 +23,20 @@ model User {
   courseAccess  CourseAccess[]
 }
 
+model Course {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  parts       CoursePart[]
+}
+
 model CoursePart {
   id          Int           @id @default(autoincrement())
   title       String
   icon        String        @default("Activity")
   order       Int           @default(0)
+  courseId    Int           @default(1)
+  course      Course        @relation(fields: [courseId], references: [id])
   blocks      CourseBlock[]
   accesses    CourseAccess[]
   createdAt   DateTime      @default(now())

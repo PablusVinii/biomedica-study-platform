@@ -151,7 +151,7 @@ export function Dashboard() {
                   Portal do Aluno
                 </h1>
                 <p className="text-sm text-muted-foreground font-medium">
-                  Engenharia Biomédica • <span className="text-primary">Bacharelado</span>
+                  {currentPart?.course?.title || "Engenharia Biomédica"} • <span className="text-primary">{currentPart?.course?.description || "Bacharelado"}</span>
                 </p>
               </div>
               <div className="flex gap-4">

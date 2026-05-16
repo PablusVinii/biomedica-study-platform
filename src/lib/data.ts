@@ -1,4 +1,9 @@
 import { Part } from "./types";
+import { curriculumData as curriculumData1 } from "./curriculum-data-1";
+import { curriculumData2 } from "./curriculum-data-2";
+import { curriculumData3 } from "./curriculum-data-3";
+import { curriculumData4 } from "./curriculum-data-4";
+import { interoperabilityCurriculumData } from "./interoperability-data";
 
 export const formationGapAlerts = [
   {
@@ -35,4 +40,23 @@ export const formationGapAlerts = [
   }
 ];
 
+export const biomedicalCurriculumData = [
+  ...curriculumData1,
+  ...curriculumData2,
+  ...curriculumData3,
+  ...curriculumData4,
+];
+
+export const allCurriculumDataMap = {
+  1: biomedicalCurriculumData,
+  2: interoperabilityCurriculumData,
+};
+
+// For backward compatibility with seed script if needed, but we'll update the seed script
+export const allCurriculumData = [
+  ...biomedicalCurriculumData,
+  ...interoperabilityCurriculumData,
+];
+
 export type { Part, Block, Topic } from "./types";
+export { interoperabilityCurriculumData };

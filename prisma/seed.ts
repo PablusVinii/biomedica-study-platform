@@ -31,6 +31,25 @@ async function main() {
 
   console.log('Seeding completed!');
   console.log({ admin, student });
+
+  // Grant access to all parts for the student for demonstration
+  const allParts = await prisma.coursePart.findMany();
+  for (const part of allParts) {
+    await prisma.courseAccess.upsert({
+      where: {
+        userId_partId: {
+          userId: student.id,
+          partId: part.id,
+        },
+      },
+      update: {},
+      create: {
+        userId: student.id,
+        partId: part.id,
+      },
+    });
+  }
+  console.log(`Granted access to ${allParts.length} parts for student.`);
 }
 
 main()

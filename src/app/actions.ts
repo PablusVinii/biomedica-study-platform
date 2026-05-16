@@ -82,6 +82,7 @@ export async function getUserData() {
     where: { id: { in: accessesIds } },
     orderBy: { order: "asc" },
     include: {
+      course: true,
       blocks: {
         orderBy: { order: "asc" },
         include: {

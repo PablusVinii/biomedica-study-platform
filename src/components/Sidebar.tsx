@@ -63,79 +63,103 @@ export function Sidebar({ parts, activePart, onSelectPart, collapsed, onToggle, 
         aria-label="Toggle sidebar"
       >
         {collapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
-      </button>
-
-      {/* Navigation */}
+      </button>      {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-2 scrollbar-thin">
-        {parts.map((part) => {
-          const Icon = getIcon(part.icon);
-          const allTopicIds = part.blocks.flatMap(b => b.topics.map(t => t.id));
-          const progress = getBlockProgress(allTopicIds);
-          const isActive = activePart === part.id;
-          const hasAccess = accesses.includes(part.id);
-          
-          // Extract semester info from title if present
-          const semesterMatch = part.title.match(/^(\d+)º Semestre — (.*)$/);
-          const semesterText = semesterMatch ? `SEMESTRE ${semesterMatch[1]}` : `MÓDULO ${part.id}`;
-          const mainTitle = semesterMatch ? semesterMatch[2] : part.title;
+        {(() => {
+          const grouped = parts.reduce((acc, part) => {
+            const courseTitle = (part as any).course?.title || "Engenharia Biomédica";
+            if (!acc[courseTitle]) acc[courseTitle] = [];
+            acc[courseTitle].push(part);
+            return acc;
+          }, {} as Record<string, Part[]>);
 
-          return (
-            <button
-              key={part.id}
-              onClick={() => hasAccess && onSelectPart(part.id)}
-              className={cn(
-                "w-full flex flex-col gap-1.5 px-3 py-3 rounded-xl transition-all relative group",
-                !hasAccess ? "opacity-60 hover:opacity-80" : "",
-                isActive
-                  ? "bg-primary/10 border border-primary/20"
-                  : "hover:bg-muted/50 border border-transparent"
+          return Object.entries(grouped).map(([courseTitle, courseParts]) => (
+            <div key={courseTitle} className="mb-4">
+              {!collapsed && (
+                <h3 className="px-4 py-2 text-[10px] font-bold text-primary/60 tracking-widest uppercase border-b border-primary/5 mb-1">
+                  {courseTitle}
+                </h3>
               )}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="active-sidebar-item"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full"
-                />
-              )}
-              <div className="flex items-center gap-3">
-                <div className={cn(
-                  "flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
-                  isActive ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground group-hover:text-foreground"
-                )}>
-                  {hasAccess ? <Icon className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-                </div>
-                {!collapsed && (
-                  <div className="flex-1 text-left min-w-0">
-                    <p className="text-[10px] font-bold text-muted-foreground tracking-widest mb-0.5">{semesterText}</p>
-                    <p className={cn(
-                      "text-sm font-semibold truncate leading-tight",
-                      isActive ? "text-primary" : "text-foreground"
-                    )}>
-                      {mainTitle}
-                    </p>
-                  </div>
-                )}
-              </div>
+              {courseParts.map((part) => {
+                const Icon = getIcon(part.icon);
+                const allTopicIds = part.blocks.flatMap(b => b.topics.map(t => t.id));
+                const progress = getBlockProgress(allTopicIds);
+                const isActive = activePart === part.id;
+                const hasAccess = accesses.includes(part.id);
+                
+                const semesterMatch = part.title.match(/^(\d+)º Semestre — (.*)$/);
+                const layerMatch = part.title.match(/^Camada (\d+) — (.*)$/);
+                
+                let subtitle = `MÓDULO ${part.id}`;
+                let mainTitle = part.title;
 
-              {/* Progress Bar (minified when collapsed) */}
-              {hasAccess && (
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
-                    <motion.div
-                      animate={{ width: `${progress}%` }}
-                      transition={{ duration: 0.5 }}
-                      className={cn(
-                        "h-full rounded-full",
-                        progress === 100 ? "bg-accent" : "bg-primary"
+                if (semesterMatch) {
+                  subtitle = `SEMESTRE ${semesterMatch[1]}`;
+                  mainTitle = semesterMatch[2];
+                } else if (layerMatch) {
+                  subtitle = `CAMADA ${layerMatch[1]}`;
+                  mainTitle = layerMatch[2];
+                }
+
+                return (
+                  <button
+                    key={part.id}
+                    onClick={() => hasAccess && onSelectPart(part.id)}
+                    className={cn(
+                      "w-full flex flex-col gap-1.5 px-3 py-3 rounded-xl transition-all relative group",
+                      !hasAccess ? "opacity-60 hover:opacity-80" : "",
+                      isActive
+                        ? "bg-primary/10 border border-primary/20"
+                        : "hover:bg-muted/50 border border-transparent"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-sidebar-item"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full"
+                      />
+                    )}
+                    <div className="flex items-center gap-3">
+                      <div className={cn(
+                        "flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
+                        isActive ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground group-hover:text-foreground"
+                      )}>
+                        {hasAccess ? <Icon className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                      </div>
+                      {!collapsed && (
+                        <div className="flex-1 text-left min-w-0">
+                          <p className="text-[10px] font-bold text-muted-foreground tracking-widest mb-0.5">{subtitle}</p>
+                          <p className={cn(
+                            "text-sm font-semibold truncate leading-tight",
+                            isActive ? "text-primary" : "text-foreground"
+                          )}>
+                            {mainTitle}
+                          </p>
+                        </div>
                       )}
-                    />
-                  </div>
-                  {!collapsed && <span className="text-[10px] font-bold text-muted-foreground">{progress}%</span>}
-                </div>
-              )}
-            </button>
-          );
-        })}
+                    </div>
+
+                    {hasAccess && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
+                          <motion.div
+                            animate={{ width: `${progress}%` }}
+                            transition={{ duration: 0.5 }}
+                            className={cn(
+                              "h-full rounded-full",
+                              progress === 100 ? "bg-accent" : "bg-primary"
+                            )}
+                          />
+                        </div>
+                        {!collapsed && <span className="text-[10px] font-bold text-muted-foreground">{progress}%</span>}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ));
+        })()}
       </nav>
 
       {/* Footer */}
