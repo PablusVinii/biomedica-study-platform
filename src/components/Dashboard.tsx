@@ -38,7 +38,8 @@ export function Dashboard() {
     blockNotes,
     saveModuleNote,
     accesses,
-    curriculum 
+    curriculum,
+    user
   } = useProgress();
 
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
@@ -132,6 +133,7 @@ export function Dashboard() {
             </p>
             <div className="text-xs text-primary font-mono mt-4">
               Cursos detectados: {courses.length} | Partes: {curriculum.length} | Com Curso: {curriculum.filter(p => !!p.course).length}
+              <br /> Logged as: {user?.email || "Unknown"}
             </div>
           </motion.div>
 

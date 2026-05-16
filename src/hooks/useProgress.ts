@@ -11,9 +11,12 @@ export function useProgress() {
   const [curriculum, setCurriculum] = useState<Part[]>([]);
   const [loaded, setLoaded] = useState(false);
 
+  const [user, setUser] = useState<any>(null);
+
   useEffect(() => {
     getUserData().then((data) => {
       if (data) {
+        setUser(data.user);
         setCompleted(new Set(data.progresses.map((p) => p.topicId)));
         
         const urls: Record<string, string> = {};
@@ -97,6 +100,7 @@ export function useProgress() {
     blockNotes,
     saveModuleNote,
     accesses,
-    curriculum
+    curriculum,
+    user
   };
 }
