@@ -472,7 +472,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                     <BookOpen className="w-4 h-4 inline-block mr-2" />
                     Conteúdo
                   </button>
-                  {selectedTopic.learningPath && (
+                  {selectedTopic?.learningPath && (
                     <button
                       onClick={() => {
                         console.log("🔵 [BlockCard] Switched to learning-path tab");
@@ -493,7 +493,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
-                {topicModalTab === "content" ? (
+                {topicModalTab === "content" && selectedTopic ? (
                   <>
                     {(selectedTopic as any).videoUrl && (
                       <div className="space-y-4">
