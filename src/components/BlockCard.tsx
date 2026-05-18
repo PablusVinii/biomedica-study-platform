@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { LearningPathSection } from "./LearningPathSection";
+import { SafeLearningPath } from "./SafeLearningPath";
 
 interface BlockCardProps {
   block: Block;
@@ -560,9 +561,8 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                   </>
                 ) : (
                   <>
-                    {selectedTopic.learningPath &&
-                      selectedTopic.learningPath.keyPoints ? (
-                      <LearningPathSection
+                    {selectedTopic.learningPath ? (
+                      <SafeLearningPath
                         learningPath={selectedTopic.learningPath}
                         topicTitle={selectedTopic.title}
                       />
