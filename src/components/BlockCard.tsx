@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, BookOpen, CheckCircle2, Circle, AlertTriangle, FileText, X, GraduationCap, Link2, Save, ExternalLink, StickyNote, Tag, Plus } from "lucide-react";
+import { ChevronDown, BookOpen, CheckCircle2, Circle, AlertTriangle, FileText, X, GraduationCap, Link2, Save, ExternalLink, StickyNote, Tag, Plus, Lightbulb } from "lucide-react";
 import { Block, Topic } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { LearningPathSection } from "./LearningPathSection";
 
 interface BlockCardProps {
   block: Block;
@@ -23,6 +24,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
   const [open, setOpen] = useState(false);
   const [showBib, setShowBib] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [topicModalTab, setTopicModalTab] = useState<"content" | "learning-path">("content");
   const [showNotebookInput, setShowNotebookInput] = useState(false);
   const [urlDraft, setUrlDraft] = useState(notebookUrl || "");
   const [showNoteEditor, setShowNoteEditor] = useState(false);
@@ -433,93 +435,143 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-3xl max-h-[85vh] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col"
             >
-              <div className="p-6 border-b border-border flex items-center justify-between bg-muted/30">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                    <GraduationCap className="w-5 h-5 text-primary" />
+              <div className="border-b border-border bg-muted/30">
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                      <GraduationCap className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold text-foreground">{selectedTopic.title}</h2>
+                      <p className="text-xs text-muted-foreground">Material de Estudo • {block.title}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-lg font-bold text-foreground">{selectedTopic.title}</h2>
-                    <p className="text-xs text-muted-foreground">Material de Estudo • {block.title}</p>
-                  </div>
+                  <button
+                    onClick={() => setSelectedTopic(null)}
+                    className="p-2 rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setSelectedTopic(null)}
-                  className="p-2 rounded-lg hover:bg-muted transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+
+                {/* Tabs */}
+                <div className="flex items-center gap-0 px-6 border-t border-border/50">
+                  <button
+                    onClick={() => setTopicModalTab("content")}
+                    className={cn(
+                      "px-4 py-3 text-sm font-semibold border-b-2 transition-colors",
+                      topicModalTab === "content"
+                        ? "border-primary text-primary"
+                        : "border-transparent text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    <BookOpen className="w-4 h-4 inline-block mr-2" />
+                    Conteúdo
+                  </button>
+                  {selectedTopic.learningPath && (
+                    <button
+                      onClick={() => setTopicModalTab("learning-path")}
+                      className={cn(
+                        "px-4 py-3 text-sm font-semibold border-b-2 transition-colors",
+                        topicModalTab === "learning-path"
+                          ? "border-primary text-primary"
+                          : "border-transparent text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <Lightbulb className="w-4 h-4 inline-block mr-2" />
+                      Caminho de Aprendizagem
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
-                {(selectedTopic as any).videoUrl && (
-                  <div className="space-y-4">
-                    {(selectedTopic as any).videoUrl.split(";").filter((url: string) => url.trim()).map((url: string, index: number) => {
-                      const videoId = getYouTubeId(url.trim());
-                      if (!videoId) return null;
-                      return (
-                        <div key={index} className="space-y-2">
-                          {((selectedTopic as any).videoUrl || "").split(";").filter((u: string) => u.trim()).length > 1 && (
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1">
-                              Vídeo {index + 1}
-                            </span>
-                          )}
-                          <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-black border border-border">
-                            <iframe
-                              src={`https://www.youtube.com/embed/${videoId}`}
-                              title={`Aula Parte ${index + 1}`}
-                              className="w-full h-full"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-                {selectedTopic.content ? (
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkMath]}
-                      rehypePlugins={[rehypeKatex]}
-                      components={{
-                        h1: ({ children }) => <h1 className="text-xl font-bold text-foreground mt-6 mb-3">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-lg font-bold text-foreground mt-5 mb-2">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-base font-bold text-primary mt-4 mb-2">{children}</h3>,
-                        h4: ({ children }) => <h4 className="text-sm font-semibold text-foreground mt-3 mb-1">{children}</h4>,
-                        p: ({ children }) => <p className="text-sm text-foreground leading-relaxed mb-3">{children}</p>,
-                        strong: ({ children }) => <strong className="font-bold text-foreground">{children}</strong>,
-                        em: ({ children }) => <em className="italic text-muted-foreground">{children}</em>,
-                        ul: ({ children }) => <ul className="list-disc pl-5 space-y-1 mb-3">{children}</ul>,
-                        ol: ({ children }) => <ol className="list-decimal pl-5 space-y-1 mb-3">{children}</ol>,
-                        li: ({ children }) => <li className="text-sm text-foreground leading-relaxed">{children}</li>,
-                        code: ({ children, className }) => {
-                          const isBlock = className?.includes("language-");
-                          return isBlock
-                            ? <code className="block bg-muted p-3 rounded-lg text-xs font-mono text-foreground overflow-x-auto">{children}</code>
-                            : <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono text-primary">{children}</code>;
-                        },
-                        table: ({ children }) => (
-                          <div className="overflow-x-auto my-4 rounded-lg border border-border">
-                            <table className="w-full text-xs border-collapse">{children}</table>
-                          </div>
-                        ),
-                        th: ({ children }) => <th className="p-2 bg-muted font-bold text-foreground text-left border-b border-border">{children}</th>,
-                        td: ({ children }) => <td className="p-2 text-muted-foreground border-b border-border/50">{children}</td>,
-                        blockquote: ({ children }) => (
-                          <blockquote className="border-l-2 border-primary/50 pl-4 my-3 text-sm text-muted-foreground italic">{children}</blockquote>
-                        ),
-                      }}
-                    >
-                      {selectedTopic.content}
-                    </ReactMarkdown>
-                  </div>
+                {topicModalTab === "content" ? (
+                  <>
+                    {(selectedTopic as any).videoUrl && (
+                      <div className="space-y-4">
+                        {(selectedTopic as any).videoUrl.split(";").filter((url: string) => url.trim()).map((url: string, index: number) => {
+                          const videoId = getYouTubeId(url.trim());
+                          if (!videoId) return null;
+                          return (
+                            <div key={index} className="space-y-2">
+                              {((selectedTopic as any).videoUrl || "").split(";").filter((u: string) => u.trim()).length > 1 && (
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1">
+                                  Vídeo {index + 1}
+                                </span>
+                              )}
+                              <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-black border border-border">
+                                <iframe
+                                  src={`https://www.youtube.com/embed/${videoId}`}
+                                  title={`Aula Parte ${index + 1}`}
+                                  className="w-full h-full"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                    {selectedTopic.content ? (
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkMath]}
+                          rehypePlugins={[rehypeKatex]}
+                          components={{
+                            h1: ({ children }) => <h1 className="text-xl font-bold text-foreground mt-6 mb-3">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-lg font-bold text-foreground mt-5 mb-2">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-base font-bold text-primary mt-4 mb-2">{children}</h3>,
+                            h4: ({ children }) => <h4 className="text-sm font-semibold text-foreground mt-3 mb-1">{children}</h4>,
+                            p: ({ children }) => <p className="text-sm text-foreground leading-relaxed mb-3">{children}</p>,
+                            strong: ({ children }) => <strong className="font-bold text-foreground">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-muted-foreground">{children}</em>,
+                            ul: ({ children }) => <ul className="list-disc pl-5 space-y-1 mb-3">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal pl-5 space-y-1 mb-3">{children}</ol>,
+                            li: ({ children }) => <li className="text-sm text-foreground leading-relaxed">{children}</li>,
+                            code: ({ children, className }) => {
+                              const isBlock = className?.includes("language-");
+                              return isBlock
+                                ? <code className="block bg-muted p-3 rounded-lg text-xs font-mono text-foreground overflow-x-auto">{children}</code>
+                                : <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono text-primary">{children}</code>;
+                            },
+                            table: ({ children }) => (
+                              <div className="overflow-x-auto my-4 rounded-lg border border-border">
+                                <table className="w-full text-xs border-collapse">{children}</table>
+                              </div>
+                            ),
+                            th: ({ children }) => <th className="p-2 bg-muted font-bold text-foreground text-left border-b border-border">{children}</th>,
+                            td: ({ children }) => <td className="p-2 text-muted-foreground border-b border-border/50">{children}</td>,
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-2 border-primary/50 pl-4 my-3 text-sm text-muted-foreground italic">{children}</blockquote>
+                            ),
+                          }}
+                        >
+                          {selectedTopic.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <div className="h-64 flex flex-col items-center justify-center text-muted-foreground gap-3">
+                        <BookOpen className="w-12 h-12 opacity-20" />
+                        <p className="text-sm">Conteúdo em desenvolvimento para este módulo.</p>
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <div className="h-64 flex flex-col items-center justify-center text-muted-foreground gap-3">
-                    <BookOpen className="w-12 h-12 opacity-20" />
-                    <p className="text-sm">Conteúdo em desenvolvimento para este módulo.</p>
-                  </div>
+                  <>
+                    {selectedTopic.learningPath ? (
+                      <LearningPathSection
+                        learningPath={selectedTopic.learningPath}
+                        topicTitle={selectedTopic.title}
+                      />
+                    ) : (
+                      <div className="h-64 flex flex-col items-center justify-center text-muted-foreground gap-3">
+                        <Lightbulb className="w-12 h-12 opacity-20" />
+                        <p className="text-sm">Caminho de aprendizagem em desenvolvimento.</p>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 
