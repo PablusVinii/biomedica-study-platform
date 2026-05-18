@@ -26,10 +26,24 @@ export function LearningPathSection({
   topicTitle,
 }: LearningPathSectionProps) {
   // Validate that learningPath exists and has required data
-  if (!learningPath) {
+  try {
+    if (!learningPath) {
+      throw new Error("learningPath is null/undefined");
+    }
+
+    if (!learningPath.keyPoints || !Array.isArray(learningPath.keyPoints)) {
+      throw new Error("keyPoints is not an array");
+    }
+
+    if (!learningPath.relatedTopicIds || !Array.isArray(learningPath.relatedTopicIds)) {
+      throw new Error("relatedTopicIds is not an array");
+    }
+  } catch (e) {
+    console.error("LearningPathSection validation failed:", e, learningPath);
     return (
-      <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-yellow-600">
-        <p>Caminho de aprendizagem não disponível. Tente recarregar a página.</p>
+      <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600">
+        <p>Erro ao carregar caminho de aprendizagem. Tente recarregar a página.</p>
+        <p className="text-xs mt-2 font-mono">{String(e)}</p>
       </div>
     );
   }

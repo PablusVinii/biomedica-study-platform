@@ -560,7 +560,8 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                   </>
                 ) : (
                   <>
-                    {selectedTopic.learningPath ? (
+                    {selectedTopic.learningPath &&
+                      selectedTopic.learningPath.keyPoints ? (
                       <LearningPathSection
                         learningPath={selectedTopic.learningPath}
                         topicTitle={selectedTopic.title}
