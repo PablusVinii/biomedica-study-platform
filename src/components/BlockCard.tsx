@@ -469,7 +469,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                     <BookOpen className="w-4 h-4 inline-block mr-2" />
                     Conteúdo
                   </button>
-                  {selectedTopic.learningPath && (
+                  {false && selectedTopic.learningPath && (
                     <button
                       onClick={() => setTopicModalTab("learning-path")}
                       className={cn(
@@ -559,21 +559,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                       </div>
                     )}
                   </>
-                ) : (
-                  <>
-                    {selectedTopic.learningPath ? (
-                      <SafeLearningPath
-                        learningPath={selectedTopic.learningPath}
-                        topicTitle={selectedTopic.title}
-                      />
-                    ) : (
-                      <div className="h-64 flex flex-col items-center justify-center text-muted-foreground gap-3">
-                        <Lightbulb className="w-12 h-12 opacity-20" />
-                        <p className="text-sm">Caminho de aprendizagem em desenvolvimento.</p>
-                      </div>
-                    )}
-                  </>
-                )}
+                ) : null}
               </div>
 
               <div className="p-4 border-t border-border bg-muted/30 flex justify-between items-center">
