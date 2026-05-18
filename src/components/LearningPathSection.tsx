@@ -42,22 +42,25 @@ export function LearningPathSection({
     }));
   };
 
+  // Helper to safely parse JSON strings
+  const safeJsonParse = (value: any): any[] => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        console.warn('Failed to parse JSON:', value, e);
+        return [];
+      }
+    }
+    return [];
+  };
+
   // Parse JSON strings from database
-  const keyPoints = typeof learningPath.keyPoints === 'string'
-    ? JSON.parse(learningPath.keyPoints)
-    : learningPath.keyPoints || [];
-
-  const commonMistakes = typeof learningPath.commonMistakes === 'string'
-    ? JSON.parse(learningPath.commonMistakes)
-    : learningPath.commonMistakes || [];
-
-  const relatedTopicIds = typeof learningPath.relatedTopicIds === 'string'
-    ? JSON.parse(learningPath.relatedTopicIds)
-    : learningPath.relatedTopicIds || [];
-
-  const prerequisites = typeof learningPath.prerequisites === 'string'
-    ? JSON.parse(learningPath.prerequisites)
-    : learningPath.prerequisites || [];
+  const keyPoints = safeJsonParse(learningPath.keyPoints);
+  const commonMistakes = safeJsonParse(learningPath.commonMistakes);
+  const relatedTopicIds = safeJsonParse(learningPath.relatedTopicIds);
+  const prerequisites = safeJsonParse(learningPath.prerequisites);
 
   const getDifficultyColor = (
     difficulty: string
