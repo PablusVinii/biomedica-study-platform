@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { toggleTopicProgress, saveTopicNotebookUrl, getUserData, saveBlockNote } from "@/app/actions";
 import { Part } from "@/lib/types";
+import { normalizeLearningPath } from "@/lib/learning-path-utils";
 
 export function useProgress() {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
@@ -18,7 +19,7 @@ export function useProgress() {
       if (data) {
         setUser(data.user);
         setCompleted(new Set(data.progresses.map((p) => p.topicId)));
-        
+
         const urls: Record<string, string> = {};
         data.notes.forEach((n) => {
           if (n.notebookUrl) urls[n.topicId] = n.notebookUrl;
@@ -35,7 +36,19 @@ export function useProgress() {
         });
         setBlockNotes(bNotes);
 
-        setCurriculum((data.curriculum as unknown as Part[]) || []);
+        // Normalize learning paths to ensure all JSON fields are properly parsed
+        const normalizedCurriculum = (data.curriculum as any[])?.map((part: any) => ({
+          ...part,
+          blocks: part.blocks?.map((block: any) => ({
+            ...block,
+            topics: block.topics?.map((topic: any) => ({
+              ...topic,
+              learningPath: topic.learningPath ? normalizeLearningPath(topic.learningPath) : null
+            })) || []
+          })) || []
+        })) || [];
+
+        setCurriculum(normalizedCurriculum as Part[]);
         setAccesses(data.accesses || []);
       }
       setLoaded(true);

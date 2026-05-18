@@ -17,7 +17,7 @@ import { LearningPath } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface LearningPathSectionProps {
-  learningPath: LearningPath;
+  learningPath: LearningPath | null;
   topicTitle: string;
 }
 
@@ -25,18 +25,16 @@ export function LearningPathSection({
   learningPath,
   topicTitle,
 }: LearningPathSectionProps) {
-  // Validate that learningPath exists
+  // Validate that learningPath exists and has required data
   if (!learningPath) {
     return (
       <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-yellow-600">
-        <p>Caminho de aprendizagem não carregado. Tente recarregar a página.</p>
+        <p>Caminho de aprendizagem não disponível. Tente recarregar a página.</p>
       </div>
     );
   }
 
-  const [expandedSections, setExpandedSections] = useState<
-    Record<string, boolean>
-  >({
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     context: true,
     keyPoints: true,
     examples: false,
@@ -51,35 +49,11 @@ export function LearningPathSection({
     }));
   };
 
-  // Helper to safely parse JSON strings
-  const safeJsonParse = (value: any): any[] => {
-    if (Array.isArray(value)) return value;
-    if (typeof value === 'string') {
-      try {
-        const parsed = JSON.parse(value);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        console.warn('Failed to parse JSON:', { value, error: e });
-        return [];
-      }
-    }
-    return [];
-  };
-
-  // Parse JSON strings from database with defensive coding
-  let keyPoints: string[] = [];
-  let commonMistakes: string[] = [];
-  let relatedTopicIds: string[] = [];
-  let prerequisites: string[] = [];
-
-  try {
-    keyPoints = safeJsonParse(learningPath.keyPoints);
-    commonMistakes = safeJsonParse(learningPath.commonMistakes);
-    relatedTopicIds = safeJsonParse(learningPath.relatedTopicIds);
-    prerequisites = safeJsonParse(learningPath.prerequisites);
-  } catch (e) {
-    console.error('Error parsing learning path data:', e, learningPath);
-  }
+  // Data should be normalized arrays at this point
+  const keyPoints = Array.isArray(learningPath.keyPoints) ? learningPath.keyPoints : [];
+  const commonMistakes = Array.isArray(learningPath.commonMistakes) ? learningPath.commonMistakes : [];
+  const relatedTopicIds = Array.isArray(learningPath.relatedTopicIds) ? learningPath.relatedTopicIds : [];
+  const prerequisites = Array.isArray(learningPath.prerequisites) ? learningPath.prerequisites : [];
 
   const getDifficultyColor = (
     difficulty: string
@@ -145,7 +119,7 @@ export function LearningPathSection({
         </div>
       </div>
 
-      {/* ====== SEÇÃO 1: CONTEXTO ====== */}
+      {/* SEÇÃO 1: CONTEXTO */}
       <CollapsibleSection
         title="Por Quê Aprender Isto?"
         isOpen={expandedSections.context}
@@ -154,23 +128,18 @@ export function LearningPathSection({
         accentColor="from-blue-500/20 to-blue-500/5"
       >
         <div className="space-y-3 text-sm text-muted-foreground">
-          {/* Context */}
           <div>
             <p className="font-semibold text-card-foreground mb-1">Contexto:</p>
             <p className="leading-relaxed italic">{learningPath.context}</p>
           </div>
 
-          {/* Why Now */}
           <div className="pt-2 border-t border-border/30">
-            <p className="font-semibold text-card-foreground mb-1">
-              ⏰ Por Que Agora?
-            </p>
+            <p className="font-semibold text-card-foreground mb-1">⏰ Por Que Agora?</p>
             <p className="leading-relaxed text-amber-600/80 dark:text-amber-400/80">
               {learningPath.whyNow}
             </p>
           </div>
 
-          {/* What Next */}
           <div className="pt-2 border-t border-border/30">
             <p className="font-semibold text-card-foreground mb-1 flex items-center gap-2">
               <ArrowRight className="w-4 h-4" />
@@ -181,14 +150,11 @@ export function LearningPathSection({
             </p>
           </div>
 
-          {/* Related Topics */}
-          {Array.isArray(relatedTopicIds) && relatedTopicIds.length > 0 && (
+          {relatedTopicIds && relatedTopicIds.length > 0 && (
             <div className="pt-2 border-t border-border/30">
-              <p className="font-semibold text-card-foreground mb-2">
-                📚 Tópicos Relacionados:
-              </p>
+              <p className="font-semibold text-card-foreground mb-2">📚 Tópicos Relacionados:</p>
               <div className="flex flex-wrap gap-2">
-                {relatedTopicIds.map((id: string | any) => (
+                {relatedTopicIds.map((id) => (
                   <span
                     key={String(id)}
                     className="px-2 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary"
@@ -202,7 +168,7 @@ export function LearningPathSection({
         </div>
       </CollapsibleSection>
 
-      {/* ====== SEÇÃO 2: CONCEITOS-CHAVE ====== */}
+      {/* SEÇÃO 2: CONCEITOS-CHAVE */}
       <CollapsibleSection
         title="Conceitos-Chave"
         isOpen={expandedSections.keyPoints}
@@ -211,11 +177,8 @@ export function LearningPathSection({
         accentColor="from-emerald-500/20 to-emerald-500/5"
       >
         <div className="space-y-2">
-          {Array.isArray(keyPoints) && keyPoints.map((point: string, idx: number) => (
-            <div
-              key={idx}
-              className="flex gap-3 text-sm text-muted-foreground group"
-            >
+          {keyPoints.map((point, idx) => (
+            <div key={idx} className="flex gap-3 text-sm text-muted-foreground group">
               <div className="flex-shrink-0 mt-0.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 group-hover:text-emerald-400 transition-colors" />
               </div>
@@ -225,7 +188,7 @@ export function LearningPathSection({
         </div>
       </CollapsibleSection>
 
-      {/* ====== SEÇÃO 3: EXEMPLOS ====== */}
+      {/* SEÇÃO 3: EXEMPLOS */}
       <CollapsibleSection
         title="Exemplos Progressivos"
         isOpen={expandedSections.examples}
@@ -234,7 +197,6 @@ export function LearningPathSection({
         accentColor="from-orange-500/20 to-orange-500/5"
       >
         <div className="space-y-4">
-          {/* Exemplo Simples */}
           {learningPath.simpleExample && (
             <ExampleCard
               title="📌 Exemplo Simples"
@@ -243,7 +205,6 @@ export function LearningPathSection({
             />
           )}
 
-          {/* Exemplo Realístico */}
           {learningPath.realisticExample && (
             <ExampleCard
               title="🏥 Exemplo Realístico (Contexto Biomédico)"
@@ -254,7 +215,7 @@ export function LearningPathSection({
         </div>
       </CollapsibleSection>
 
-      {/* ====== SEÇÃO 4: ERROS COMUNS ====== */}
+      {/* SEÇÃO 4: ERROS COMUNS */}
       <CollapsibleSection
         title="Erros Comuns a Evitar"
         isOpen={expandedSections.mistakes}
@@ -263,18 +224,16 @@ export function LearningPathSection({
         accentColor="from-red-500/20 to-red-500/5"
       >
         <div className="space-y-2">
-          {Array.isArray(commonMistakes) && commonMistakes.map((mistake: string, idx: number) => (
+          {commonMistakes.map((mistake, idx) => (
             <div key={idx} className="flex gap-3 text-sm text-muted-foreground">
-              <div className="flex-shrink-0 mt-0.5 text-red-500 font-bold">
-                ✗
-              </div>
+              <div className="flex-shrink-0 mt-0.5 text-red-500 font-bold">✗</div>
               <p className="leading-relaxed">{String(mistake)}</p>
             </div>
           ))}
         </div>
       </CollapsibleSection>
 
-      {/* ====== SEÇÃO 5: METADADOS ====== */}
+      {/* SEÇÃO 5: METADADOS */}
       <CollapsibleSection
         title="Metadados de Aprendizagem"
         isOpen={expandedSections.metadata}
@@ -283,14 +242,11 @@ export function LearningPathSection({
         accentColor="from-slate-500/20 to-slate-500/5"
       >
         <div className="grid grid-cols-2 gap-4 text-sm">
-          {/* Pré-requisitos */}
           <div>
-            <p className="font-semibold text-card-foreground mb-2">
-              📋 Pré-Requisitos:
-            </p>
-            {Array.isArray(prerequisites) && prerequisites.length > 0 ? (
+            <p className="font-semibold text-card-foreground mb-2">📋 Pré-Requisitos:</p>
+            {prerequisites && prerequisites.length > 0 ? (
               <div className="flex flex-col gap-1">
-                {prerequisites.map((prereq: string) => (
+                {prerequisites.map((prereq) => (
                   <span
                     key={String(prereq)}
                     className="px-2 py-1 rounded text-xs bg-muted/50 text-muted-foreground"
@@ -304,21 +260,13 @@ export function LearningPathSection({
             )}
           </div>
 
-          {/* Tempo estimado */}
           <div>
-            <p className="font-semibold text-card-foreground mb-2">
-              ⏱️ Tempo Estimado:
-            </p>
-            <p className="text-muted-foreground">
-              {learningPath.estimatedTime} minutos
-            </p>
+            <p className="font-semibold text-card-foreground mb-2">⏱️ Tempo Estimado:</p>
+            <p className="text-muted-foreground">{learningPath.estimatedTime} minutos</p>
           </div>
 
-          {/* Dificuldade */}
           <div>
-            <p className="font-semibold text-card-foreground mb-2">
-              📊 Nível:
-            </p>
+            <p className="font-semibold text-card-foreground mb-2">📊 Nível:</p>
             <div
               className={cn(
                 "inline-block px-3 py-1 rounded-full text-xs font-medium",
@@ -369,14 +317,9 @@ function CollapsibleSection({
       >
         <div className="flex items-center gap-3">
           <div className="text-muted-foreground">{icon}</div>
-          <span className="text-sm font-semibold text-card-foreground">
-            {title}
-          </span>
+          <span className="text-sm font-semibold text-card-foreground">{title}</span>
         </div>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
           <ChevronDown className="w-4 h-4 text-muted-foreground" />
         </motion.div>
       </button>
@@ -427,9 +370,7 @@ function ExampleCard({ title, content, level }: ExampleCardProps) {
         getLevelColor(level)
       )}
     >
-      <p className="font-semibold text-card-foreground mb-2 font-sans">
-        {title}
-      </p>
+      <p className="font-semibold text-card-foreground mb-2 font-sans">{title}</p>
       {content}
     </motion.div>
   );
