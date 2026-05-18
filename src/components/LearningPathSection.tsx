@@ -25,6 +25,15 @@ export function LearningPathSection({
   learningPath,
   topicTitle,
 }: LearningPathSectionProps) {
+  // Validate that learningPath exists
+  if (!learningPath) {
+    return (
+      <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-yellow-600">
+        <p>Caminho de aprendizagem não carregado. Tente recarregar a página.</p>
+      </div>
+    );
+  }
+
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({
@@ -47,20 +56,30 @@ export function LearningPathSection({
     if (Array.isArray(value)) return value;
     if (typeof value === 'string') {
       try {
-        return JSON.parse(value);
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [];
       } catch (e) {
-        console.warn('Failed to parse JSON:', value, e);
+        console.warn('Failed to parse JSON:', { value, error: e });
         return [];
       }
     }
     return [];
   };
 
-  // Parse JSON strings from database
-  const keyPoints = safeJsonParse(learningPath.keyPoints);
-  const commonMistakes = safeJsonParse(learningPath.commonMistakes);
-  const relatedTopicIds = safeJsonParse(learningPath.relatedTopicIds);
-  const prerequisites = safeJsonParse(learningPath.prerequisites);
+  // Parse JSON strings from database with defensive coding
+  let keyPoints: string[] = [];
+  let commonMistakes: string[] = [];
+  let relatedTopicIds: string[] = [];
+  let prerequisites: string[] = [];
+
+  try {
+    keyPoints = safeJsonParse(learningPath.keyPoints);
+    commonMistakes = safeJsonParse(learningPath.commonMistakes);
+    relatedTopicIds = safeJsonParse(learningPath.relatedTopicIds);
+    prerequisites = safeJsonParse(learningPath.prerequisites);
+  } catch (e) {
+    console.error('Error parsing learning path data:', e, learningPath);
+  }
 
   const getDifficultyColor = (
     difficulty: string
@@ -163,18 +182,18 @@ export function LearningPathSection({
           </div>
 
           {/* Related Topics */}
-          {relatedTopicIds.length > 0 && (
+          {Array.isArray(relatedTopicIds) && relatedTopicIds.length > 0 && (
             <div className="pt-2 border-t border-border/30">
               <p className="font-semibold text-card-foreground mb-2">
                 📚 Tópicos Relacionados:
               </p>
               <div className="flex flex-wrap gap-2">
-                {relatedTopicIds.map((id: string) => (
+                {relatedTopicIds.map((id: string | any) => (
                   <span
-                    key={id}
+                    key={String(id)}
                     className="px-2 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary"
                   >
-                    {id}
+                    {String(id)}
                   </span>
                 ))}
               </div>
@@ -192,7 +211,7 @@ export function LearningPathSection({
         accentColor="from-emerald-500/20 to-emerald-500/5"
       >
         <div className="space-y-2">
-          {keyPoints.map((point: string, idx: number) => (
+          {Array.isArray(keyPoints) && keyPoints.map((point: string, idx: number) => (
             <div
               key={idx}
               className="flex gap-3 text-sm text-muted-foreground group"
@@ -200,7 +219,7 @@ export function LearningPathSection({
               <div className="flex-shrink-0 mt-0.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 group-hover:text-emerald-400 transition-colors" />
               </div>
-              <p className="leading-relaxed">{point}</p>
+              <p className="leading-relaxed">{String(point)}</p>
             </div>
           ))}
         </div>
@@ -244,12 +263,12 @@ export function LearningPathSection({
         accentColor="from-red-500/20 to-red-500/5"
       >
         <div className="space-y-2">
-          {commonMistakes.map((mistake: string, idx: number) => (
+          {Array.isArray(commonMistakes) && commonMistakes.map((mistake: string, idx: number) => (
             <div key={idx} className="flex gap-3 text-sm text-muted-foreground">
               <div className="flex-shrink-0 mt-0.5 text-red-500 font-bold">
                 ✗
               </div>
-              <p className="leading-relaxed">{mistake}</p>
+              <p className="leading-relaxed">{String(mistake)}</p>
             </div>
           ))}
         </div>
@@ -269,14 +288,14 @@ export function LearningPathSection({
             <p className="font-semibold text-card-foreground mb-2">
               📋 Pré-Requisitos:
             </p>
-            {prerequisites.length > 0 ? (
+            {Array.isArray(prerequisites) && prerequisites.length > 0 ? (
               <div className="flex flex-col gap-1">
                 {prerequisites.map((prereq: string) => (
                   <span
-                    key={prereq}
+                    key={String(prereq)}
                     className="px-2 py-1 rounded text-xs bg-muted/50 text-muted-foreground"
                   >
-                    {prereq}
+                    {String(prereq)}
                   </span>
                 ))}
               </div>
