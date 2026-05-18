@@ -87,7 +87,10 @@ export async function getUserData() {
         orderBy: { order: "asc" },
         include: {
           topics: {
-            orderBy: { order: "asc" }
+            orderBy: { order: "asc" },
+            include: {
+              learningPath: true
+            }
           }
         }
       }
