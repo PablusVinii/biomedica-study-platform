@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { LearningPathSection } from "./LearningPathSection";
+import { SafeLearningPath } from "./SafeLearningPath";
 
 interface BlockCardProps {
   block: Block;
@@ -457,7 +458,10 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                 {/* Tabs */}
                 <div className="flex items-center gap-0 px-6 border-t border-border/50">
                   <button
-                    onClick={() => setTopicModalTab("content")}
+                    onClick={() => {
+                      console.log("🔵 [BlockCard] Switched to content tab");
+                      setTopicModalTab("content");
+                    }}
                     className={cn(
                       "px-4 py-3 text-sm font-semibold border-b-2 transition-colors",
                       topicModalTab === "content"
@@ -468,9 +472,12 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                     <BookOpen className="w-4 h-4 inline-block mr-2" />
                     Conteúdo
                   </button>
-                  {selectedTopic.learningPath && (
+                  {selectedTopic?.learningPath && (
                     <button
-                      onClick={() => setTopicModalTab("learning-path")}
+                      onClick={() => {
+                        console.log("🔵 [BlockCard] Switched to learning-path tab");
+                        setTopicModalTab("learning-path");
+                      }}
                       className={cn(
                         "px-4 py-3 text-sm font-semibold border-b-2 transition-colors",
                         topicModalTab === "learning-path"
@@ -486,7 +493,7 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-thin">
-                {topicModalTab === "content" ? (
+                {topicModalTab === "content" && selectedTopic ? (
                   <>
                     {(selectedTopic as any).videoUrl && (
                       <div className="space-y-4">
@@ -558,21 +565,12 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                       </div>
                     )}
                   </>
-                ) : (
-                  <>
-                    {selectedTopic.learningPath ? (
-                      <LearningPathSection
-                        learningPath={selectedTopic.learningPath}
-                        topicTitle={selectedTopic.title}
-                      />
-                    ) : (
-                      <div className="h-64 flex flex-col items-center justify-center text-muted-foreground gap-3">
-                        <Lightbulb className="w-12 h-12 opacity-20" />
-                        <p className="text-sm">Caminho de aprendizagem em desenvolvimento.</p>
-                      </div>
-                    )}
-                  </>
-                )}
+                ) : topicModalTab === "learning-path" && selectedTopic.learningPath ? (
+                  <SafeLearningPath
+                    learningPath={selectedTopic.learningPath}
+                    topicTitle={selectedTopic.title}
+                  />
+                ) : null}
               </div>
 
               <div className="p-4 border-t border-border bg-muted/30 flex justify-between items-center">
