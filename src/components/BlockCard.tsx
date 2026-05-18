@@ -458,7 +458,10 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                 {/* Tabs */}
                 <div className="flex items-center gap-0 px-6 border-t border-border/50">
                   <button
-                    onClick={() => setTopicModalTab("content")}
+                    onClick={() => {
+                      console.log("🔵 [BlockCard] Switched to content tab");
+                      setTopicModalTab("content");
+                    }}
                     className={cn(
                       "px-4 py-3 text-sm font-semibold border-b-2 transition-colors",
                       topicModalTab === "content"
@@ -469,9 +472,12 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                     <BookOpen className="w-4 h-4 inline-block mr-2" />
                     Conteúdo
                   </button>
-                  {false && selectedTopic.learningPath && (
+                  {selectedTopic.learningPath && (
                     <button
-                      onClick={() => setTopicModalTab("learning-path")}
+                      onClick={() => {
+                        console.log("🔵 [BlockCard] Switched to learning-path tab");
+                        setTopicModalTab("learning-path");
+                      }}
                       className={cn(
                         "px-4 py-3 text-sm font-semibold border-b-2 transition-colors",
                         topicModalTab === "learning-path"
@@ -559,6 +565,11 @@ export function BlockCard({ block, isCompleted, toggleTopic, getBlockProgress, n
                       </div>
                     )}
                   </>
+                ) : topicModalTab === "learning-path" && selectedTopic.learningPath ? (
+                  <SafeLearningPath
+                    learningPath={selectedTopic.learningPath}
+                    topicTitle={selectedTopic.title}
+                  />
                 ) : null}
               </div>
 

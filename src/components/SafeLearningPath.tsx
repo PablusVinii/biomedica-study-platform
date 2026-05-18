@@ -2,6 +2,7 @@
 
 import { LearningPath } from "@/lib/types";
 import { LearningPathSection as LearningPathSectionComponent } from "./LearningPathSection";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 interface SafeLearningPathProps {
   learningPath: any;
@@ -12,101 +13,132 @@ interface SafeLearningPathProps {
  * Safe wrapper that prevents any invalid data from reaching LearningPathSection
  */
 export function SafeLearningPath({ learningPath, topicTitle }: SafeLearningPathProps) {
-  console.log("SafeLearningPath received:", {
-    learningPath: learningPath ? "exists" : "null",
-    keyPoints: learningPath?.keyPoints,
-    relatedTopicIds: learningPath?.relatedTopicIds,
+  console.log("🟢 [SafeLearningPath] ENTRY - received data:", {
+    exists: !!learningPath,
+    type: typeof learningPath,
+    keyPoints: {
+      value: learningPath?.keyPoints,
+      type: typeof learningPath?.keyPoints,
+      isArray: Array.isArray(learningPath?.keyPoints),
+    },
+    relatedTopicIds: {
+      value: learningPath?.relatedTopicIds,
+      type: typeof learningPath?.relatedTopicIds,
+      isArray: Array.isArray(learningPath?.relatedTopicIds),
+    },
   });
 
   // AGGRESSIVE validation
   if (!learningPath) {
-    console.warn("❌ learningPath is null/undefined");
+    console.warn("🟡 [SafeLearningPath] learningPath is null/undefined");
     return <div className="p-4 text-yellow-600">Dados não disponíveis (1)</div>;
   }
 
-  // Check and fix relatedTopicIds
-  let relatedTopicIds = learningPath.relatedTopicIds;
-  if (typeof relatedTopicIds === "string") {
-    try {
-      relatedTopicIds = JSON.parse(relatedTopicIds);
-    } catch (e) {
-      console.error("Failed to parse relatedTopicIds:", e);
-      relatedTopicIds = [];
-    }
-  }
-  if (!Array.isArray(relatedTopicIds)) {
-    console.warn("⚠️ relatedTopicIds is not array:", relatedTopicIds);
-    relatedTopicIds = [];
-  }
+  try {
+    const safeParseField = (fieldName: string, field: any): any[] => {
+      console.log(`🔍 [SafeLearningPath] Parsing ${fieldName}:`, {
+        value: field,
+        type: typeof field,
+        isArray: Array.isArray(field),
+      });
 
-  // Check and fix keyPoints
-  let keyPoints = learningPath.keyPoints;
-  if (typeof keyPoints === "string") {
-    try {
-      keyPoints = JSON.parse(keyPoints);
-    } catch (e) {
-      console.error("Failed to parse keyPoints:", e);
-      keyPoints = [];
-    }
-  }
-  if (!Array.isArray(keyPoints)) {
-    console.warn("⚠️ keyPoints is not array:", keyPoints);
-    keyPoints = [];
-  }
+      if (Array.isArray(field)) {
+        console.log(`✅ [SafeLearningPath] ${fieldName} is already array`);
+        return field;
+      }
 
-  // Check and fix commonMistakes
-  let commonMistakes = learningPath.commonMistakes;
-  if (typeof commonMistakes === "string") {
-    try {
-      commonMistakes = JSON.parse(commonMistakes);
-    } catch (e) {
-      console.error("Failed to parse commonMistakes:", e);
-      commonMistakes = [];
-    }
-  }
-  if (!Array.isArray(commonMistakes)) {
-    console.warn("⚠️ commonMistakes is not array:", commonMistakes);
-    commonMistakes = [];
-  }
+      if (typeof field === "string") {
+        try {
+          const parsed = JSON.parse(field);
+          if (Array.isArray(parsed)) {
+            console.log(`✅ [SafeLearningPath] ${fieldName} parsed from JSON string`);
+            return parsed;
+          }
+          console.warn(
+            `⚠️ [SafeLearningPath] ${fieldName} parsed but not array:`,
+            parsed
+          );
+          return [];
+        } catch (e) {
+          console.error(`❌ [SafeLearningPath] Failed to parse ${fieldName}:`, e);
+          return [];
+        }
+      }
 
-  // Check and fix prerequisites
-  let prerequisites = learningPath.prerequisites;
-  if (typeof prerequisites === "string") {
-    try {
-      prerequisites = JSON.parse(prerequisites);
-    } catch (e) {
-      console.error("Failed to parse prerequisites:", e);
-      prerequisites = [];
-    }
+      console.warn(`⚠️ [SafeLearningPath] ${fieldName} is not string/array:`, field);
+      return [];
+    };
+
+    // Check and fix relatedTopicIds
+    const relatedTopicIds = safeParseField("relatedTopicIds", learningPath.relatedTopicIds);
+
+    // Check and fix keyPoints
+    const keyPoints = safeParseField("keyPoints", learningPath.keyPoints);
+
+    // Check and fix commonMistakes
+    const commonMistakes = safeParseField("commonMistakes", learningPath.commonMistakes);
+
+    // Check and fix prerequisites
+    const prerequisites = safeParseField("prerequisites", learningPath.prerequisites);
+
+    // Create a corrected learningPath object
+    const correctedLearningPath: LearningPath = {
+      id: learningPath.id || "",
+      topicId: learningPath.topicId || "",
+      context: learningPath.context || "",
+      whyNow: learningPath.whyNow || "",
+      whatNext: learningPath.whatNext || "",
+      relatedTopicIds,
+      keyPoints,
+      commonMistakes,
+      simpleExample: learningPath.simpleExample,
+      realisticExample: learningPath.realisticExample,
+      difficulty: learningPath.difficulty || "INTERMEDIATE",
+      estimatedTime: learningPath.estimatedTime || 30,
+      prerequisites,
+    };
+
+    console.log("✅ [SafeLearningPath] Corrected data ready:", {
+      relatedTopicIds: {
+        count: correctedLearningPath.relatedTopicIds.length,
+        isArray: Array.isArray(correctedLearningPath.relatedTopicIds),
+      },
+      keyPoints: {
+        count: correctedLearningPath.keyPoints.length,
+        isArray: Array.isArray(correctedLearningPath.keyPoints),
+      },
+    });
+
+    return (
+      <ErrorBoundary
+        fallback={(error, reset) => (
+          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600">
+            <p className="font-semibold">Erro ao renderizar Caminho de Aprendizagem</p>
+            <p className="text-xs mt-1 font-mono break-words">{error.message}</p>
+            <button
+              onClick={reset}
+              className="mt-3 px-3 py-1.5 rounded-lg bg-red-500/20 text-red-600 text-xs font-semibold hover:bg-red-500/30 transition-colors"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        )}
+      >
+        <LearningPathSectionComponent
+          learningPath={correctedLearningPath}
+          topicTitle={topicTitle}
+        />
+      </ErrorBoundary>
+    );
+  } catch (error) {
+    console.error("❌ [SafeLearningPath] FATAL ERROR:", error);
+    return (
+      <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600">
+        <p className="font-semibold">Erro ao processar Caminho de Aprendizagem</p>
+        <p className="text-xs mt-1 font-mono break-words">
+          {error instanceof Error ? error.message : String(error)}
+        </p>
+      </div>
+    );
   }
-  if (!Array.isArray(prerequisites)) {
-    console.warn("⚠️ prerequisites is not array:", prerequisites);
-    prerequisites = [];
-  }
-
-  // Create a corrected learningPath object
-  const correctedLearningPath: LearningPath = {
-    id: learningPath.id || "",
-    topicId: learningPath.topicId || "",
-    context: learningPath.context || "",
-    whyNow: learningPath.whyNow || "",
-    whatNext: learningPath.whatNext || "",
-    relatedTopicIds,
-    keyPoints,
-    commonMistakes,
-    simpleExample: learningPath.simpleExample,
-    realisticExample: learningPath.realisticExample,
-    difficulty: learningPath.difficulty || "INTERMEDIATE",
-    estimatedTime: learningPath.estimatedTime || 30,
-    prerequisites,
-  };
-
-  console.log("✅ SafeLearningPath corrected:", correctedLearningPath);
-
-  return (
-    <LearningPathSectionComponent
-      learningPath={correctedLearningPath}
-      topicTitle={topicTitle}
-    />
-  );
 }

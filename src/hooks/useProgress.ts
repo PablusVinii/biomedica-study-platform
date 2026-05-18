@@ -37,17 +37,43 @@ export function useProgress() {
         setBlockNotes(bNotes);
 
         // Normalize learning paths to ensure all JSON fields are properly parsed
+        console.log("🟠 [useProgress] Starting curriculum normalization...");
         const normalizedCurriculum = (data.curriculum as any[])?.map((part: any) => ({
           ...part,
           blocks: part.blocks?.map((block: any) => ({
             ...block,
-            topics: block.topics?.map((topic: any) => ({
-              ...topic,
-              learningPath: topic.learningPath ? normalizeLearningPath(topic.learningPath) : null
-            })) || []
+            topics: block.topics?.map((topic: any) => {
+              if (topic.learningPath) {
+                console.log(`🔍 [useProgress] Normalizing learning path for topic ${topic.id}:`, {
+                  before: {
+                    relatedTopicIds: typeof topic.learningPath.relatedTopicIds,
+                    keyPoints: typeof topic.learningPath.keyPoints,
+                  }
+                });
+                const normalized = normalizeLearningPath(topic.learningPath);
+                console.log(`✅ [useProgress] Normalized learning path for topic ${topic.id}:`, {
+                  after: {
+                    relatedTopicIds: {
+                      type: typeof normalized?.relatedTopicIds,
+                      isArray: Array.isArray(normalized?.relatedTopicIds),
+                    },
+                    keyPoints: {
+                      type: typeof normalized?.keyPoints,
+                      isArray: Array.isArray(normalized?.keyPoints),
+                    },
+                  }
+                });
+                return {
+                  ...topic,
+                  learningPath: normalized
+                };
+              }
+              return topic;
+            }) || []
           })) || []
         })) || [];
 
+        console.log("✅ [useProgress] Curriculum normalization complete");
         setCurriculum(normalizedCurriculum as Part[]);
         setAccesses(data.accesses || []);
       }

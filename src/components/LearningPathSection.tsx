@@ -26,20 +26,35 @@ export function LearningPathSection({
   topicTitle,
 }: LearningPathSectionProps) {
   // Validate that learningPath exists and has required data
+  console.log("🟣 [LearningPathSection] ENTRY - received:", {
+    exists: !!learningPath,
+    type: typeof learningPath,
+    keyPoints: {
+      type: typeof learningPath?.keyPoints,
+      isArray: Array.isArray(learningPath?.keyPoints),
+    },
+    relatedTopicIds: {
+      type: typeof learningPath?.relatedTopicIds,
+      isArray: Array.isArray(learningPath?.relatedTopicIds),
+    },
+  });
+
   try {
     if (!learningPath) {
       throw new Error("learningPath is null/undefined");
     }
 
     if (!learningPath.keyPoints || !Array.isArray(learningPath.keyPoints)) {
-      throw new Error("keyPoints is not an array");
+      throw new Error(`keyPoints is not an array: ${typeof learningPath.keyPoints}`);
     }
 
     if (!learningPath.relatedTopicIds || !Array.isArray(learningPath.relatedTopicIds)) {
-      throw new Error("relatedTopicIds is not an array");
+      throw new Error(`relatedTopicIds is not an array: ${typeof learningPath.relatedTopicIds}`);
     }
+
+    console.log("✅ [LearningPathSection] Validation passed");
   } catch (e) {
-    console.error("LearningPathSection validation failed:", e, learningPath);
+    console.error("❌ [LearningPathSection] Validation failed:", e, learningPath);
     return (
       <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600">
         <p>Erro ao carregar caminho de aprendizagem. Tente recarregar a página.</p>
@@ -68,6 +83,13 @@ export function LearningPathSection({
   const commonMistakes = Array.isArray(learningPath.commonMistakes) ? learningPath.commonMistakes : [];
   const relatedTopicIds = Array.isArray(learningPath.relatedTopicIds) ? learningPath.relatedTopicIds : [];
   const prerequisites = Array.isArray(learningPath.prerequisites) ? learningPath.prerequisites : [];
+
+  console.log("🟣 [LearningPathSection] After safe extraction:", {
+    keyPoints: { count: keyPoints.length, isArray: Array.isArray(keyPoints) },
+    commonMistakes: { count: commonMistakes.length, isArray: Array.isArray(commonMistakes) },
+    relatedTopicIds: { count: relatedTopicIds.length, isArray: Array.isArray(relatedTopicIds) },
+    prerequisites: { count: prerequisites.length, isArray: Array.isArray(prerequisites) },
+  });
 
   const getDifficultyColor = (
     difficulty: string
