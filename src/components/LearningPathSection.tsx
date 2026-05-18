@@ -42,6 +42,23 @@ export function LearningPathSection({
     }));
   };
 
+  // Parse JSON strings from database
+  const keyPoints = typeof learningPath.keyPoints === 'string'
+    ? JSON.parse(learningPath.keyPoints)
+    : learningPath.keyPoints || [];
+
+  const commonMistakes = typeof learningPath.commonMistakes === 'string'
+    ? JSON.parse(learningPath.commonMistakes)
+    : learningPath.commonMistakes || [];
+
+  const relatedTopicIds = typeof learningPath.relatedTopicIds === 'string'
+    ? JSON.parse(learningPath.relatedTopicIds)
+    : learningPath.relatedTopicIds || [];
+
+  const prerequisites = typeof learningPath.prerequisites === 'string'
+    ? JSON.parse(learningPath.prerequisites)
+    : learningPath.prerequisites || [];
+
   const getDifficultyColor = (
     difficulty: string
   ): {
@@ -143,13 +160,13 @@ export function LearningPathSection({
           </div>
 
           {/* Related Topics */}
-          {learningPath.relatedTopicIds.length > 0 && (
+          {relatedTopicIds.length > 0 && (
             <div className="pt-2 border-t border-border/30">
               <p className="font-semibold text-card-foreground mb-2">
                 📚 Tópicos Relacionados:
               </p>
               <div className="flex flex-wrap gap-2">
-                {learningPath.relatedTopicIds.map((id) => (
+                {relatedTopicIds.map((id: string) => (
                   <span
                     key={id}
                     className="px-2 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary"
@@ -172,7 +189,7 @@ export function LearningPathSection({
         accentColor="from-emerald-500/20 to-emerald-500/5"
       >
         <div className="space-y-2">
-          {learningPath.keyPoints.map((point, idx) => (
+          {keyPoints.map((point: string, idx: number) => (
             <div
               key={idx}
               className="flex gap-3 text-sm text-muted-foreground group"
@@ -224,7 +241,7 @@ export function LearningPathSection({
         accentColor="from-red-500/20 to-red-500/5"
       >
         <div className="space-y-2">
-          {learningPath.commonMistakes.map((mistake, idx) => (
+          {commonMistakes.map((mistake: string, idx: number) => (
             <div key={idx} className="flex gap-3 text-sm text-muted-foreground">
               <div className="flex-shrink-0 mt-0.5 text-red-500 font-bold">
                 ✗
@@ -249,9 +266,9 @@ export function LearningPathSection({
             <p className="font-semibold text-card-foreground mb-2">
               📋 Pré-Requisitos:
             </p>
-            {learningPath.prerequisites.length > 0 ? (
+            {prerequisites.length > 0 ? (
               <div className="flex flex-col gap-1">
-                {learningPath.prerequisites.map((prereq) => (
+                {prerequisites.map((prereq: string) => (
                   <span
                     key={prereq}
                     className="px-2 py-1 rounded text-xs bg-muted/50 text-muted-foreground"
